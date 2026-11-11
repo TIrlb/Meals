@@ -1,0 +1,1915 @@
+[
+ {
+  "id": "frozen-pizza",
+  "name": "Frozen Pizza",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen pizza"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "diy-pizza",
+  "name": "DIY Pizza",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pizza dough",
+   "pizza sauce",
+   "mozzarella",
+   "pepperoni"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "bagel-pizza",
+  "name": "Bagel Pizza",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "bagels",
+   "pizza sauce",
+   "mozzarella",
+   "pepperoni"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "takeout",
+  "name": "Takeout",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "tuna-melts",
+  "name": "Tuna melts",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "canned tuna",
+   "mayo",
+   "bread",
+   "cheddar slices",
+   "butter"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "diy-cheese-powder-pizza",
+  "name": "DIY Cheese powder pizza",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "beefy-tacos",
+  "name": "Beefy tacos",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "taco seasoning",
+   "taco shells",
+   "shredded cheese",
+   "lettuce",
+   "tomato",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "salsa-chicken",
+  "name": "Salsa chicken",
+  "category": "Mexican",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "jar of salsa",
+   "taco seasoning",
+   "rice",
+   "tortillas",
+   "shredded cheese"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "pork-carnitas",
+  "name": "Pork carnitas",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pork shoulder",
+   "orange",
+   "lime",
+   "cumin",
+   "oregano",
+   "garlic",
+   "tortillas",
+   "onion",
+   "cilantro"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "enchiladas",
+  "name": "Enchiladas",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "tortillas",
+   "shredded chicken",
+   "enchilada sauce",
+   "shredded cheese",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "breakfast-quesadillas",
+  "name": "Breakfast quesadillas",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "tortillas",
+   "eggs",
+   "shredded cheese",
+   "breakfast sausage or bacon",
+   "salsa"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "quesadillas",
+  "name": "Quesadillas",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "tortillas",
+   "shredded cheese",
+   "cooked chicken",
+   "salsa",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "walking-tacos",
+  "name": "Walking tacos",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "taco seasoning",
+   "snack-size Fritos/Doritos bags",
+   "shredded cheese",
+   "lettuce",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "taco-salads",
+  "name": "Taco salads",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "taco seasoning",
+   "romaine",
+   "tortilla chips",
+   "shredded cheese",
+   "tomato",
+   "ranch or salsa"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "huevos-rancheros",
+  "name": "Huevos Rancheros",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "eggs",
+   "corn tortillas",
+   "refried beans",
+   "salsa",
+   "shredded cheese",
+   "avocado"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "flatbread-carnitas-mango-salsa",
+  "name": "Flatbread carnitas - mango salsa",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "flatbreads",
+   "pork carnitas",
+   "mango",
+   "red onion",
+   "cilantro",
+   "lime",
+   "jalapeño"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "tamales",
+  "name": "Tamales",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "tamales",
+   "salsa",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "orange-chicken",
+  "name": "Orange Chicken",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "cornstarch",
+   "orange juice",
+   "soy sauce",
+   "brown sugar",
+   "garlic",
+   "rice"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-tikka-masala",
+  "name": "Chicken Tikka Masala",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken thighs",
+   "yogurt",
+   "tikka masala sauce or paste",
+   "heavy cream",
+   "onion",
+   "garlic",
+   "rice",
+   "naan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "kung-pao-chicken",
+  "name": "Kung pao chicken",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "peanuts",
+   "soy sauce",
+   "rice vinegar",
+   "bell pepper",
+   "green onion",
+   "rice"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "wontons",
+  "name": "Wontons",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen wontons",
+   "chicken broth",
+   "green onion",
+   "soy sauce"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "potstickers",
+  "name": "Potstickers",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen potstickers",
+   "dipping sauce",
+   "rice",
+   "frozen stir-fry veggies"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-curry",
+  "name": "Chicken curry",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken thighs",
+   "curry powder",
+   "coconut milk",
+   "onion",
+   "garlic",
+   "rice"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "red-curry-with-onion-and-pepper",
+  "name": "Red curry with onion and pepper",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "red curry paste",
+   "coconut milk",
+   "chicken",
+   "onion",
+   "bell pepper",
+   "rice"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "asian-salad",
+  "name": "Asian salad",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cabbage slaw mix",
+   "cooked chicken",
+   "mandarin oranges",
+   "wonton strips",
+   "sesame dressing"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "samosas",
+  "name": "Samosas",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen samosas",
+   "chutney"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-chili",
+  "name": "Chicken chili",
+  "category": "Soups",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "white beans",
+   "chicken broth",
+   "green chiles",
+   "cumin",
+   "cream cheese",
+   "corn"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "tomato-tortellini",
+  "name": "Tomato tortellini",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cheese tortellini",
+   "crushed tomatoes",
+   "chicken broth",
+   "heavy cream",
+   "garlic",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "tortellini-spinach",
+  "name": "Tortellini spinach",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cheese tortellini",
+   "spinach",
+   "chicken broth",
+   "Italian sausage",
+   "garlic",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chili",
+  "name": "Chili",
+  "category": "Soups",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "kidney beans",
+   "diced tomatoes",
+   "tomato sauce",
+   "onion",
+   "chili powder",
+   "shredded cheese"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "potato-soup",
+  "name": "Potato soup",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "potatoes",
+   "bacon",
+   "onion",
+   "chicken broth",
+   "milk",
+   "shredded cheddar",
+   "sour cream"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "butternut-squash-soup",
+  "name": "Butternut squash soup",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "butternut squash",
+   "onion",
+   "chicken or veggie broth",
+   "cream",
+   "nutmeg"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "burgers-dogs",
+  "name": "Burgers & dogs",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef patties",
+   "hot dogs",
+   "buns",
+   "cheese slices",
+   "ketchup",
+   "mustard",
+   "pickles"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "brats",
+  "name": "Brats",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "bratwurst",
+   "brat buns",
+   "sauerkraut",
+   "mustard",
+   "onion"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "ribs",
+  "name": "Ribs",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pork ribs",
+   "dry rub",
+   "BBQ sauce"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "lemon-pepper-chicken",
+  "name": "Lemon pepper chicken",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts or thighs",
+   "lemon pepper seasoning",
+   "lemon",
+   "olive oil"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "barbecue-chicken",
+  "name": "Barbecue chicken",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken thighs or drumsticks",
+   "BBQ sauce"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "hot-dogs",
+  "name": "Hot dogs",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "hot dogs",
+   "buns",
+   "ketchup",
+   "mustard",
+   "relish"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "mac-and-dogs",
+  "name": "Mac and dogs",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "boxed mac and cheese",
+   "hot dogs"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "crippy-chikkin-sandos",
+  "name": "Crippy Chikkin Sandos",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "breading or panko",
+   "buns",
+   "pickles",
+   "mayo"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "brinner",
+  "name": "Brinner",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pancake mix or waffles",
+   "eggs",
+   "bacon or sausage",
+   "syrup",
+   "fruit"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "pulled-pork",
+  "name": "Pulled pork",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "pork shoulder",
+   "BBQ sauce",
+   "buns",
+   "coleslaw mix"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "grilled-cheese",
+  "name": "Grilled cheese",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "bread",
+   "American or cheddar slices",
+   "butter",
+   "tomato soup"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "meatloaf",
+  "name": "Meatloaf",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "breadcrumbs",
+   "egg",
+   "onion",
+   "ketchup",
+   "potatoes"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-rice",
+  "name": "Chicken & rice",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "rice",
+   "chicken broth",
+   "broccoli"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "ham-balls",
+  "name": "Ham balls",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground ham",
+   "ground pork",
+   "graham cracker crumbs",
+   "eggs",
+   "milk",
+   "brown sugar",
+   "vinegar",
+   "tomato soup"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "turkey-gravy-mashed-taters-cran",
+  "name": "Turkey, gravy, mashed taters, cran",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "turkey breast",
+   "gravy",
+   "potatoes",
+   "butter",
+   "milk",
+   "cranberry sauce"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "fish-sticks",
+  "name": "Fish sticks",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen fish sticks",
+   "tartar sauce",
+   "frozen fries"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-nuggies",
+  "name": "Chicken nuggies",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen chicken nuggets",
+   "dipping sauces",
+   "frozen fries"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "club-sandwiches",
+  "name": "Club sandwiches",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "bread",
+   "deli turkey",
+   "deli ham",
+   "bacon",
+   "lettuce",
+   "tomato",
+   "mayo"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "panini",
+  "name": "Panini",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ciabatta or sourdough",
+   "deli meat",
+   "provolone",
+   "pesto"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "blts",
+  "name": "BLTs",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "bacon",
+   "lettuce",
+   "tomato",
+   "bread",
+   "mayo"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-salad",
+  "name": "Chicken salad",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cooked chicken",
+   "mayo",
+   "celery",
+   "grapes",
+   "croissants"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "egg-salad",
+  "name": "Egg salad",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "eggs",
+   "mayo",
+   "mustard",
+   "bread"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "omelettes",
+  "name": "Omelettes",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "eggs",
+   "shredded cheese",
+   "ham",
+   "peppers",
+   "onion"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "meatball-subs",
+  "name": "Meatball subs",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen meatballs",
+   "marinara",
+   "hoagie rolls",
+   "mozzarella"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "roast-potatoes",
+  "name": "Roast & potatoes",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chuck roast",
+   "potatoes",
+   "carrots",
+   "onion",
+   "onion soup mix",
+   "beef broth"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "meatball-sliders",
+  "name": "Meatball sliders",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "frozen meatballs",
+   "slider rolls",
+   "marinara",
+   "mozzarella"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "sloppy-joes",
+  "name": "Sloppy joes",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "sloppy joe sauce or ketchup + brown sugar + mustard",
+   "buns"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "lasagna",
+  "name": "Lasagna",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "lasagna noodles",
+   "ground beef or Italian sausage",
+   "marinara",
+   "ricotta",
+   "mozzarella",
+   "parmesan",
+   "breadsticks"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "spaghetti-meatballs",
+  "name": "Spaghetti & meatballs",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "spaghetti",
+   "frozen meatballs",
+   "marinara",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "pasta-sausage",
+  "name": "Pasta & sausage",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "penne",
+   "Italian sausage",
+   "marinara",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "calzones",
+  "name": "Calzones",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pizza dough",
+   "ricotta",
+   "mozzarella",
+   "pepperoni",
+   "marinara"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-sausage-pasta",
+  "name": "Chicken sausage pasta",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "pasta",
+   "chicken sausage",
+   "cherry tomatoes",
+   "spinach",
+   "garlic",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "pesto-basil-tomato-tortellini",
+  "name": "Pesto basil tomato tortellini",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cheese tortellini",
+   "pesto",
+   "cherry tomatoes",
+   "fresh basil",
+   "parmesan"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "panera-noodles",
+  "name": "Panera noodles",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "Panera mac and cheese or noodles (grocery)"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "tortellini-soup",
+  "name": "Tortellini soup",
+  "category": "Soups",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "cheese tortellini",
+   "Italian sausage",
+   "crushed tomatoes",
+   "chicken broth",
+   "cream cheese",
+   "spinach"
+  ],
+  "source": "family",
+  "url": "",
+  "notes": ""
+ },
+ {
+  "id": "chicken-parmesan",
+  "name": "Chicken Parmesan",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "breadcrumbs",
+   "parmesan",
+   "egg",
+   "marinara",
+   "mozzarella",
+   "spaghetti"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/lightened-up-baked-chicken-parmesan/",
+  "notes": ""
+ },
+ {
+  "id": "sesame-chicken",
+  "name": "Sesame Chicken",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "cornstarch",
+   "soy sauce",
+   "honey",
+   "sesame oil",
+   "sesame seeds",
+   "rice"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/sesame-chicken/",
+  "notes": ""
+ },
+ {
+  "id": "baked-chicken-tenders",
+  "name": "Baked Chicken Tenders",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken tenders",
+   "panko",
+   "parmesan",
+   "egg",
+   "dipping sauce"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/baked-chicken-tenders/",
+  "notes": ""
+ },
+ {
+  "id": "slow-cooker-honey-garlic-chicken",
+  "name": "Slow Cooker Honey Garlic Chicken",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken thighs",
+   "honey",
+   "soy sauce",
+   "garlic",
+   "ketchup",
+   "rice"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/slow-cooker-honey-garlic-chicken/",
+  "notes": ""
+ },
+ {
+  "id": "chicken-broccoli-rice-casserole",
+  "name": "Chicken Broccoli Rice Casserole",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cooked chicken",
+   "rice",
+   "broccoli",
+   "cheddar",
+   "cream of chicken soup"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/chicken-broccoli-rice-casserole/",
+  "notes": ""
+ },
+ {
+  "id": "crockpot-chicken-tacos",
+  "name": "Crockpot Chicken Tacos",
+  "category": "Mexican",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "salsa",
+   "taco seasoning",
+   "tortillas",
+   "shredded cheese"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/3-ingredient-slow-cooker-taco-chicken/",
+  "notes": ""
+ },
+ {
+  "id": "chicken-taquitos",
+  "name": "Chicken Taquitos",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "shredded chicken",
+   "cream cheese",
+   "salsa",
+   "shredded cheese",
+   "small tortillas"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/baked-chicken-taquitos/",
+  "notes": ""
+ },
+ {
+  "id": "chicken-noodle-soup",
+  "name": "Chicken Noodle Soup",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken",
+   "egg noodles",
+   "carrots",
+   "celery",
+   "onion",
+   "chicken broth"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/chicken-noodle-soup/",
+  "notes": ""
+ },
+ {
+  "id": "broccoli-cheddar-soup",
+  "name": "Broccoli Cheddar Soup",
+  "category": "Soups",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "broccoli",
+   "cheddar",
+   "onion",
+   "carrots",
+   "chicken broth",
+   "milk",
+   "butter",
+   "flour"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/broccoli-cheddar-soup/",
+  "notes": ""
+ },
+ {
+  "id": "slow-cooker-chicken-taco-soup",
+  "name": "Slow Cooker Chicken Taco Soup",
+  "category": "Soups",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "black beans",
+   "corn",
+   "diced tomatoes",
+   "taco seasoning",
+   "chicken broth",
+   "tortilla chips"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/easy-slow-cooker-chicken-taco-soup/",
+  "notes": ""
+ },
+ {
+  "id": "homemade-mac-and-cheese",
+  "name": "Homemade Mac and Cheese",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "elbow macaroni",
+   "cheddar",
+   "milk",
+   "butter",
+   "flour"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/homemade-mac-and-cheese/",
+  "notes": ""
+ },
+ {
+  "id": "bbq-chicken-sandwiches",
+  "name": "BBQ Chicken Sandwiches",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "BBQ sauce",
+   "buns",
+   "coleslaw mix"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/instant-pot-bbq-chicken/",
+  "notes": ""
+ },
+ {
+  "id": "cheesy-spinach-stuffed-shells",
+  "name": "Cheesy Spinach Stuffed Shells",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "jumbo pasta shells",
+   "ricotta",
+   "spinach",
+   "mozzarella",
+   "parmesan",
+   "marinara"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/cheesy-spinach-stuffed-shells/",
+  "notes": ""
+ },
+ {
+  "id": "baked-spaghetti",
+  "name": "Baked Spaghetti",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "spaghetti",
+   "ground beef",
+   "marinara",
+   "cream cheese",
+   "mozzarella"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/baked-spaghetti/",
+  "notes": ""
+ },
+ {
+  "id": "crock-pot-lasagna",
+  "name": "Crock Pot Lasagna",
+  "category": "Italian",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "lasagna noodles",
+   "ground beef",
+   "marinara",
+   "ricotta",
+   "mozzarella"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/easy-slow-cooker-lasagna/",
+  "notes": ""
+ },
+ {
+  "id": "slow-cooker-taco-pasta",
+  "name": "Slow Cooker Taco Pasta",
+  "category": "Mexican",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "taco seasoning",
+   "salsa",
+   "pasta shells",
+   "shredded cheese"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/easy-slow-cooker-taco-pasta/",
+  "notes": ""
+ },
+ {
+  "id": "honey-garlic-salmon-sheet-pan",
+  "name": "Honey Garlic Salmon Sheet Pan",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "salmon fillets",
+   "honey",
+   "soy sauce",
+   "garlic",
+   "green beans or broccoli",
+   "potatoes"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/honey-garlic-salmon-and-vegetables-sheet-pan-dinner/",
+  "notes": ""
+ },
+ {
+  "id": "goulash",
+  "name": "Goulash",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "elbow macaroni",
+   "diced tomatoes",
+   "tomato sauce",
+   "onion",
+   "Italian seasoning"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/goulash/",
+  "notes": ""
+ },
+ {
+  "id": "stuffed-pepper-casserole",
+  "name": "Stuffed Pepper Casserole",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "bell peppers",
+   "rice",
+   "diced tomatoes",
+   "shredded cheese"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/stuffed-pepper-casserole/",
+  "notes": ""
+ },
+ {
+  "id": "fried-rice",
+  "name": "Fried Rice",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cooked rice",
+   "eggs",
+   "frozen peas and carrots",
+   "soy sauce",
+   "green onion",
+   "cooked chicken or ham"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/fried-rice-recipe/",
+  "notes": ""
+ },
+ {
+  "id": "turkey-burgers",
+  "name": "Turkey Burgers",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground turkey",
+   "breadcrumbs",
+   "egg",
+   "buns",
+   "cheese slices"
+  ],
+  "source": "web",
+  "url": "https://kristineskitchenblog.com/turkey-burgers/",
+  "notes": ""
+ },
+ {
+  "id": "enchilada-skillet",
+  "name": "Enchilada Skillet",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "enchilada sauce",
+   "corn tortillas",
+   "black beans",
+   "shredded cheese"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/enchilada-skillet/",
+  "notes": ""
+ },
+ {
+  "id": "homemade-hamburger-helper",
+  "name": "Homemade Hamburger Helper",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "elbow macaroni",
+   "milk",
+   "beef broth",
+   "cheddar",
+   "paprika"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/hamburger-helper/",
+  "notes": ""
+ },
+ {
+  "id": "cheeseburger-macaroni",
+  "name": "Cheeseburger Macaroni",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "elbow macaroni",
+   "beef broth",
+   "cheddar",
+   "ketchup",
+   "mustard"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/cheeseburger-macaroni-stove-top-youll-never-buy-the-boxed-kind-again/",
+  "notes": ""
+ },
+ {
+  "id": "ravioli-with-tomato-cream-sauce",
+  "name": "Ravioli with Tomato Cream Sauce",
+  "category": "Italian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "cheese ravioli",
+   "crushed tomatoes",
+   "heavy cream",
+   "garlic",
+   "parmesan"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/ravioli-tomato-cream-sauce/",
+  "notes": ""
+ },
+ {
+  "id": "ham-and-cheese-sliders",
+  "name": "Ham and Cheese Sliders",
+  "category": "General",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "Hawaiian rolls",
+   "deli ham",
+   "Swiss cheese",
+   "butter",
+   "Dijon",
+   "poppy seeds"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/ham-cheese-slider-bake/",
+  "notes": ""
+ },
+ {
+  "id": "pizza-sliders",
+  "name": "Pizza Sliders",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "Hawaiian rolls",
+   "pizza sauce",
+   "mozzarella",
+   "pepperoni",
+   "butter",
+   "Italian seasoning"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/pizza-sliders/",
+  "notes": ""
+ },
+ {
+  "id": "french-bread-pizza",
+  "name": "French Bread Pizza",
+  "category": "Pizza Night",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "French bread loaf",
+   "pizza sauce",
+   "mozzarella",
+   "pepperoni"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/french-bread-pizza/",
+  "notes": ""
+ },
+ {
+  "id": "crunchwrap-supreme",
+  "name": "Crunchwrap Supreme",
+  "category": "Mexican",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "large tortillas",
+   "ground beef",
+   "taco seasoning",
+   "tostada shells",
+   "nacho cheese",
+   "sour cream",
+   "lettuce",
+   "tomato"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/copycat-crunchwrap-supreme/",
+  "notes": ""
+ },
+ {
+  "id": "smash-burgers",
+  "name": "Smash Burgers",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "burger buns",
+   "American cheese",
+   "onion",
+   "pickles",
+   "sauce"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/smash-burgers/",
+  "notes": ""
+ },
+ {
+  "id": "grilled-chicken-sandwiches",
+  "name": "Grilled Chicken Sandwiches",
+  "category": "Grillin",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "marinade",
+   "buns",
+   "lettuce",
+   "tomato",
+   "cheese"
+  ],
+  "source": "web",
+  "url": "https://www.spendwithpennies.com/grilled-chicken-sandwich/",
+  "notes": ""
+ },
+ {
+  "id": "slow-cooker-mongolian-beef",
+  "name": "Slow Cooker Mongolian Beef",
+  "category": "Asian",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "flank steak",
+   "soy sauce",
+   "brown sugar",
+   "garlic",
+   "ginger",
+   "cornstarch",
+   "green onion",
+   "rice"
+  ],
+  "source": "web",
+  "url": "https://thegingeredwhisk.com/slow-cooker-mongolian-beef/",
+  "notes": ""
+ },
+ {
+  "id": "egg-roll-in-a-bowl",
+  "name": "Egg Roll in a Bowl",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground pork",
+   "coleslaw mix",
+   "soy sauce",
+   "garlic",
+   "ginger",
+   "green onion",
+   "rice"
+  ],
+  "source": "web",
+  "url": "https://thegingeredwhisk.com/egg-roll-in-a-bowl/",
+  "notes": ""
+ },
+ {
+  "id": "slow-cooker-pork-ramen",
+  "name": "Slow Cooker Pork Ramen",
+  "category": "Asian",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "pork shoulder",
+   "ramen noodles",
+   "chicken broth",
+   "soy sauce",
+   "garlic",
+   "ginger",
+   "eggs",
+   "green onion"
+  ],
+  "source": "web",
+  "url": "https://thegingeredwhisk.com/crock-pot-pork-ramen/",
+  "notes": ""
+ },
+ {
+  "id": "chicken-teriyaki-bowls",
+  "name": "Chicken Teriyaki Bowls",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken thighs",
+   "teriyaki sauce",
+   "rice",
+   "broccoli",
+   "carrots"
+  ],
+  "source": "web",
+  "url": "https://thegingeredwhisk.com/chicken-teriyaki/",
+  "notes": ""
+ },
+ {
+  "id": "bulgogi-beef-bowls",
+  "name": "Bulgogi Beef Bowls",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "thin-sliced beef or ground beef",
+   "soy sauce",
+   "brown sugar",
+   "garlic",
+   "sesame oil",
+   "rice",
+   "cucumber"
+  ],
+  "source": "web",
+  "url": "https://thegingeredwhisk.com/30-minute-korean-bulgogi-beef-bowls/",
+  "notes": ""
+ },
+ {
+  "id": "sweet-and-sour-chicken",
+  "name": "Sweet and Sour Chicken",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "pineapple",
+   "bell pepper",
+   "sweet and sour sauce",
+   "rice"
+  ],
+  "source": "web",
+  "url": "https://www.theseasonedmom.com/sweet-and-sour-chicken/",
+  "notes": ""
+ },
+ {
+  "id": "chicken-lettuce-wraps",
+  "name": "Chicken Lettuce Wraps",
+  "category": "Asian",
+  "crockpot": false,
+  "active": true,
+  "ingredients": [
+   "ground chicken",
+   "water chestnuts",
+   "hoisin",
+   "soy sauce",
+   "garlic",
+   "butter lettuce"
+  ],
+  "source": "web",
+  "url": "https://realhousemoms.com/chicken-lettuce-wraps/",
+  "notes": ""
+ },
+ {
+  "id": "crockpot-chicken-and-gravy",
+  "name": "Crockpot Chicken and Gravy",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "chicken gravy mix",
+   "cream of chicken soup",
+   "mashed potatoes or rice"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ },
+ {
+  "id": "crack-chicken",
+  "name": "Crack Chicken",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "cream cheese",
+   "ranch seasoning",
+   "bacon",
+   "cheddar",
+   "buns"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ },
+ {
+  "id": "tater-tot-casserole",
+  "name": "Tater Tot Casserole",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "ground beef",
+   "tater tots",
+   "cream of mushroom soup",
+   "green beans",
+   "cheddar"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ },
+ {
+  "id": "ham-and-beans",
+  "name": "Ham and Beans",
+  "category": "Soups",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "ham hock or diced ham",
+   "great northern beans",
+   "onion",
+   "chicken broth",
+   "cornbread"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ },
+ {
+  "id": "french-dips",
+  "name": "French Dips",
+  "category": "General",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chuck roast",
+   "beef broth",
+   "onion soup mix",
+   "hoagie rolls",
+   "provolone"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ },
+ {
+  "id": "crockpot-chicken-fajitas",
+  "name": "Crockpot Chicken Fajitas",
+  "category": "Mexican",
+  "crockpot": true,
+  "active": true,
+  "ingredients": [
+   "chicken breasts",
+   "bell peppers",
+   "onion",
+   "fajita seasoning",
+   "salsa",
+   "tortillas",
+   "sour cream"
+  ],
+  "source": "web",
+  "url": "https://www.themagicalslowcooker.com/20-back-to-school-slow-cooker-dinners",
+  "notes": ""
+ }
+]

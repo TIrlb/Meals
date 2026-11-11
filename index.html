@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1033">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Mealio Dealio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎰</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1033; --bg2: #24164a; --felt: #2d1b5e; --gold: #f5c542; --gold2: #c9962a;
+    --red: #e8344e; --red2: #a81c33; --cream: #fff8e7; --ink: #2a1a10; --muted: #b9a9e0;
+    --line: rgba(245,197,66,.35); --ok: #3fd18b;
+    --row: 64px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: #fff; font: 15px/1.35 Rubik, system-ui, sans-serif; }
+  body { min-height: 100dvh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); background:
+    radial-gradient(120% 60% at 50% -10%, #3b237a 0%, transparent 60%), var(--bg); }
+  button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+  input, select, textarea { font: inherit; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 12px; }
+  [hidden] { display: none !important; }
+
+  /* marquee */
+  .marquee { margin: calc(10px + env(safe-area-inset-top)) auto 10px; border-radius: 18px; padding: 10px 12px 8px;
+    background: linear-gradient(#8f1a2e, #5e0f1e); position: relative; text-align: center;
+    box-shadow: 0 0 0 3px var(--gold2), 0 10px 30px rgba(0,0,0,.4); }
+  .marquee h1 { margin: 2px 0 0; font: 400 30px/1 Bungee, sans-serif; color: var(--gold); letter-spacing: 1px;
+    text-shadow: 0 2px 0 #7a4b00, 0 0 18px rgba(245,197,66,.55); }
+  .bulbs { display: flex; justify-content: space-between; padding: 0 4px; }
+  .bulbs i { width: 7px; height: 7px; border-radius: 50%; background: #ffe9a8; box-shadow: 0 0 6px #ffd76a;
+    animation: blink 1.2s infinite; }
+  .bulbs i:nth-child(odd) { animation-delay: .6s; }
+  @keyframes blink { 0%,49% { opacity: 1 } 50%,100% { opacity: .25 } }
+  .weeknav { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; font-weight: 700; color: #ffe6b0; }
+  .weeknav button { width: 34px; height: 30px; border-radius: 8px; background: rgba(0,0,0,.25); font-size: 18px; }
+  .weeknav .lbl { min-width: 170px; }
+  .sync { font-size: 11px; color: #ffcf9a; opacity: .8; height: 14px; }
+
+  /* machine */
+  .machine { background: linear-gradient(var(--felt), #21134a); border-radius: 20px; padding: 10px 8px;
+    box-shadow: inset 0 0 0 2px var(--line), 0 12px 30px rgba(0,0,0,.35); }
+  .row { display: grid; grid-template-columns: 22px 46px 1fr 40px 62px; align-items: center; gap: 6px;
+    height: calc(var(--row) + 10px); border-radius: 12px; padding: 0 2px; transition: background .15s, transform .15s; }
+  .row.drop { background: rgba(245,197,66,.18); }
+  .row.dragging { opacity: .35; }
+  .grip { height: 100%; display: grid; place-items: center; color: var(--muted); touch-action: none; cursor: grab; font-size: 18px; letter-spacing: -3px; }
+  .day { text-align: center; line-height: 1.05; }
+  .day b { display: block; font: 400 15px Bungee, sans-serif; color: var(--gold); }
+  .day span { font-size: 12px; color: var(--muted); }
+  .day.today b { color: #fff; text-shadow: 0 0 10px var(--gold); }
+  .reel { position: relative; height: var(--row); overflow: hidden; border-radius: 10px; background: var(--cream); color: var(--ink);
+    box-shadow: inset 0 8px 10px -6px rgba(0,0,0,.45), inset 0 -8px 10px -6px rgba(0,0,0,.45), 0 0 0 2px #e3c97c; }
+  .reel.held { box-shadow: inset 0 0 0 3px var(--red), 0 0 14px rgba(232,52,78,.55); }
+  .strip { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+  .cell { height: var(--row); padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; }
+  .cell .nm { font-weight: 800; font-size: 15px; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .cell .meta { font-size: 11px; display: flex; gap: 6px; align-items: center; margin-top: 2px; }
+  .chip { white-space: nowrap; padding: 1px 7px; border-radius: 999px; font-weight: 700; color: #fff; font-size: 10.5px; }
+  .warn { color: #c2410c; font-weight: 700; white-space: nowrap; }
+  .cell.empty .nm { color: #b6a688; font-weight: 500; }
+  .reel.blur .strip { filter: blur(1.2px); }
+  .pot { height: 40px; border-radius: 10px; font-size: 20px; filter: grayscale(1); opacity: .45; background: rgba(0,0,0,.2); }
+  .pot.on { filter: none; opacity: 1; background: rgba(245,197,66,.22); box-shadow: inset 0 0 0 2px var(--gold); }
+  .hold { height: 44px; border-radius: 10px; font: 400 13px Bungee, sans-serif; background: #3a2a6b; color: #d8ccff;
+    box-shadow: 0 3px 0 #1b1040; }
+  .hold.on { background: var(--red); color: #fff; box-shadow: 0 3px 0 var(--red2), 0 0 12px rgba(232,52,78,.6); }
+  .hold:active { transform: translateY(2px); box-shadow: none; }
+
+  .controls { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; align-items: center; margin: 14px 0 6px; }
+  .spin { height: 74px; border-radius: 40px; font: 400 28px Bungee, sans-serif; color: #fff;
+    background: radial-gradient(circle at 50% 30%, #ff6b80, var(--red) 55%, var(--red2)); box-shadow: 0 6px 0 #6d0f20, 0 10px 30px rgba(232,52,78,.45); }
+  .spin:active { transform: translateY(4px); box-shadow: 0 2px 0 #6d0f20; }
+  .spin:disabled { filter: saturate(.4) brightness(.8); }
+  .side { height: 48px; border-radius: 12px; background: #2b1d5a; color: #d8ccff; font-weight: 700; font-size: 13px; }
+  .stats { text-align: center; color: var(--muted); font-size: 12px; }
+
+  /* lunch strip */
+  .lunch { margin: 14px 0 8px; background: #fffaf0; color: var(--ink); border-radius: 14px; padding: 10px 10px 8px; }
+  .lunch h3 { margin: 0 0 6px; font: 400 13px Bungee, sans-serif; color: #8f1a2e; display: flex; justify-content: space-between; }
+  .lunch h3 small { font: 500 11px Rubik, sans-serif; color: #8a7a5a; }
+  .lgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .lday { background: #f4ead2; border-radius: 8px; padding: 5px 6px; min-height: 52px; font-size: 12px; }
+  .lday b { display: block; font-size: 10.5px; color: #8a7a5a; text-transform: uppercase; }
+  .lday.clash { background: #ffe1d1; box-shadow: inset 0 0 0 2px #f97316; }
+  .lday.none { opacity: .5; }
+
+  /* jackpot */
+  .jackpot { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 50; }
+  .jackpot span { font: 400 54px Bungee, sans-serif; color: var(--gold); text-shadow: 0 4px 0 #7a4b00, 0 0 40px #ffcf4a;
+    animation: pop 1.6s ease-out forwards; }
+  @keyframes pop { 0% { transform: scale(.2) rotate(-8deg); opacity: 0 } 25% { transform: scale(1.15) rotate(3deg); opacity: 1 }
+    70% { transform: scale(1); opacity: 1 } 100% { transform: scale(1.4); opacity: 0 } }
+  .confetti { position: fixed; top: -10px; width: 9px; height: 14px; z-index: 49; pointer-events: none; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
+
+  /* other views */
+  .panel { background: var(--bg2); border-radius: 16px; padding: 12px; margin: 10px 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .panel h2 { margin: 0 0 10px; font: 400 18px Bungee, sans-serif; color: var(--gold); }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 8px; }
+  .toolbar input { flex: 1; }
+  .field, .toolbar input, select, textarea { background: #140b2b; color: #fff; border: 1px solid #3e2d78; border-radius: 10px; padding: 10px; width: 100%; }
+  .btn { background: var(--gold); color: #2a1a00; font-weight: 800; border-radius: 10px; padding: 10px 14px; }
+  .btn.ghost { background: #33236a; color: #fff; }
+  .btn.danger { background: #4a1530; color: #ffb3c0; }
+  .cats { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 4px; scrollbar-width: none; }
+  .cats button { white-space: nowrap; padding: 5px 10px; border-radius: 999px; background: #33236a; font-size: 12.5px; font-weight: 700; }
+  .cats button.on { background: var(--gold); color: #2a1a00; }
+  .rlist { display: grid; gap: 4px; }
+  .ritem { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; padding: 8px 6px; border-radius: 10px; background: rgba(255,255,255,.03); }
+  .ritem.off { opacity: .45; }
+  .ritem .nm { font-weight: 700; }
+  .ritem .sub { font-size: 12px; color: var(--muted); }
+  .ritem input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--gold); }
+  .count { color: var(--muted); font-size: 12px; margin: 4px 2px 8px; }
+  .shop h4 { margin: 12px 0 4px; color: #ffe6b0; font-size: 14px; }
+  .shop label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 2px; }
+  .shop label input { width: 20px; height: 20px; accent-color: var(--gold); flex: none; margin-top: 1px; }
+  .shop label.done span { text-decoration: line-through; opacity: .5; }
+  .shop .from { color: var(--muted); font-size: 11.5px; }
+  .seg { display: flex; background: #140b2b; border-radius: 10px; padding: 3px; margin-bottom: 8px; }
+  .seg button { flex: 1; padding: 7px; border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--muted); }
+  .seg button.on { background: #3a2a6b; color: #fff; }
+  .srow { display: grid; grid-template-columns: 54px 1fr 1fr 34px; gap: 6px; align-items: center; margin-bottom: 6px; font-size: 13px; }
+  .srow select { padding: 7px; font-size: 13px; }
+  .srow input { width: 22px; height: 22px; accent-color: var(--gold); justify-self: center; }
+  .shead { font-size: 11px; color: var(--muted); }
+  .note { color: var(--muted); font-size: 12.5px; }
+
+  /* sheet modal */
+  .scrim { position: fixed; inset: 0; background: rgba(5,2,15,.6); z-index: 40; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet { background: var(--bg2); width: 100%; max-width: 560px; max-height: 88dvh; overflow: auto; border-radius: 20px 20px 0 0;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,.5); }
+  .sheet h2 { margin: 0 0 4px; font: 400 20px Bungee, sans-serif; color: var(--gold); }
+  .sheet label.f { display: block; margin: 10px 0 4px; font-size: 12px; color: var(--muted); font-weight: 700; }
+  .sheet .acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .sheet ul { margin: 6px 0; padding-left: 20px; }
+  .sheet a { color: var(--gold); }
+  .pick { display: grid; gap: 4px; max-height: 50dvh; overflow: auto; margin-top: 8px; }
+  .pick button { text-align: left; padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.04); display: flex; justify-content: space-between; gap: 8px; }
+
+  /* tabs */
+  .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: flex; justify-content: center;
+    background: rgba(20,11,43,.96); backdrop-filter: blur(8px); border-top: 1px solid #3e2d78; padding-bottom: env(safe-area-inset-bottom); }
+  .tabs button { flex: 1; max-width: 140px; padding: 9px 0 8px; font-size: 11.5px; font-weight: 700; color: var(--muted); }
+  .tabs button i { display: block; font-style: normal; font-size: 20px; margin-bottom: 1px; }
+  .tabs button.on { color: var(--gold); }
+  .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: #000c; padding: 8px 14px; border-radius: 10px; z-index: 60; font-size: 13px; }
+  .ghost-row { position: fixed; z-index: 45; pointer-events: none; opacity: .92; transform: scale(1.03); box-shadow: 0 12px 30px rgba(0,0,0,.5); border-radius: 12px; background: var(--felt); }
+  @media (max-width: 380px) { :root { --row: 58px; } .row { grid-template-columns: 18px 40px 1fr 36px 54px; gap: 4px; } .cell .nm { font-size: 14px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="marquee">
+    <div class="bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h1>MEALIO DEALIO</h1>
+    <div class="weeknav"><button id="prev" aria-label="Previous week">‹</button><span class="lbl" id="weekLbl"></span><button id="next" aria-label="Next week">›</button></div>
+    <div class="sync" id="sync"></div>
+  </header>
+
+  <main id="v-spin">
+    <section class="machine" id="machine"></section>
+    <div class="controls">
+      <button class="side" id="clearBtn">Release all</button>
+      <button class="spin" id="spinBtn">SPIN</button>
+      <button class="side" id="holdAllBtn">Hold all</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <section class="lunch" id="lunch"></section>
+  </main>
+
+  <main id="v-book" hidden>
+    <section class="panel">
+      <h2>Recipe book</h2>
+      <div class="toolbar"><input id="q" type="search" placeholder="Search meals or ingredients"><button class="btn" id="addBtn">+ Add</button></div>
+      <div class="cats" id="catFilter"></div>
+      <div class="count" id="bookCount"></div>
+      <div class="rlist" id="bookList"></div>
+    </section>
+  </main>
+
+  <main id="v-list" hidden>
+    <section class="panel shop">
+      <h2>Shopping list</h2>
+      <div class="seg"><button data-mode="meal" class="on">By meal</button><button data-mode="all">Combined</button></div>
+      <div id="shopBody"></div>
+      <div class="acts" style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="shareList">Share / copy</button><button class="btn ghost" id="resetList">Uncheck all</button></div>
+    </section>
+  </main>
+
+  <main id="v-settings" hidden>
+    <section class="panel">
+      <h2>Settings</h2>
+      <label class="note" for="weekStart">Week starts on</label>
+      <select id="weekStart" style="margin:4px 0 14px"></select>
+      <div class="srow shead"><span>Day</span><span>Usual category</span><span>Usual meal</span><span>🍲</span></div>
+      <div id="dayRules"></div>
+      <p class="note">Usual category and meal are soft: the machine leans that way on those days but can still land elsewhere. 🍲 marks that day as crockpot by default on a new week.</p>
+      <label style="display:flex;gap:10px;align-items:center;margin:12px 0"><input type="checkbox" id="sound" style="width:20px;height:20px;accent-color:var(--gold)"> Sound effects</label>
+      <div class="acts" style="display:flex;gap:8px"><button class="btn" id="saveSettings">Save settings</button></div>
+    </section>
+    <section class="panel">
+      <h2>Connection</h2>
+      <p class="note" id="connInfo"></p>
+      <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="copyLink">Copy link for another phone</button><button class="btn danger" id="disconnect">Disconnect</button></div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs">
+  <button data-view="spin" class="on"><i>🎰</i>Spin</button>
+  <button data-view="book"><i>📖</i>Recipes</button>
+  <button data-view="list"><i>🛒</i>List</button>
+  <button data-view="settings"><i>⚙️</i>Settings</button>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+  var CATS = ['Pizza Night', 'Mexican', 'Asian', 'Soups', 'Grillin', 'Italian', 'General'];
+  var CAT_COLORS = { 'Pizza Night': '#e8344e', 'Mexican': '#e07a10', 'Asian': '#c0392b', 'Soups': '#2f7fe0', 'Grillin': '#7a4b1c', 'Italian': '#2e9d4f', 'General': '#7357c9' };
+  var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var DOW_LONG = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var DEFAULT_SETTINGS = { weekStart: 2, defaults: { 2: 'Mexican', 5: 'Pizza Night', 6: 'Grillin' }, crockpotDays: [], favorites: { 6: 'burgers-dogs' }, sound: true };
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2200); }
+
+  /* ---------- connection ---------- */
+  (function provision() {
+    var u = new URL(location.href);
+    if (u.searchParams.get('api') && u.searchParams.get('token')) {
+      ls('mealio.api', u.searchParams.get('api')); ls('mealio.token', u.searchParams.get('token'));
+      u.searchParams.delete('api'); u.searchParams.delete('token');
+      history.replaceState(null, '', u.pathname + u.search + u.hash);
+    }
+  })();
+  var API = ls('mealio.api'), TOKEN = ls('mealio.token');
+  var LOCAL = !(API && TOKEN);
+
+  function apiGet() {
+    return fetch(API + '?action=state&token=' + encodeURIComponent(TOKEN)).then(function (r) { return r.json(); })
+      .then(function (j) { if (!j.ok) throw new Error(j.error); return j.state; });
+  }
+  function apiPost(body) {
+    body.token = TOKEN;
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); }).then(function (j) { if (!j.ok) throw new Error(j.error); return j; });
+  }
+
+  /* ---------- state ---------- */
+  var S = { recipes: [], settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)), weeks: [], lunch: [] };
+  var byId = {};
+  var weekOffset = 0;
+  var board = [];          // 7 x {recipeId, name, held, crockpot}
+  var spinning = false;
+  var spins = 0;
+
+  function index() { byId = {}; S.recipes.forEach(function (r) { byId[r.id] = r; }); }
+  function mergeSettings(s) {
+    var o = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    Object.keys(s || {}).forEach(function (k) { if (s[k] !== '' && s[k] != null) o[k] = s[k]; });
+    o.weekStart = Number(o.weekStart) || 0;
+    return o;
+  }
+
+  function loadLocal() {
+    var saved = ls('mealio.local');
+    if (saved) { try { var j = JSON.parse(saved); return Promise.resolve(j); } catch (e) {} }
+    return fetch('data/recipes.json').then(function (r) { return r.json(); }).then(function (recipes) {
+      return { recipes: recipes, settings: DEFAULT_SETTINGS, weeks: [], lunch: [] };
+    });
+  }
+  function saveLocal() { ls('mealio.local', JSON.stringify(S)); }
+
+  function load(first) {
+    var p = LOCAL ? loadLocal() : apiGet();
+    return p.then(function (st) {
+      S.recipes = st.recipes || []; S.settings = mergeSettings(st.settings); S.weeks = st.weeks || []; S.lunch = st.lunch || [];
+      index();
+      if (first || !dirty) loadBoard();
+      renderAll();
+      $('sync').textContent = LOCAL ? 'Local mode: saved on this device only' : '';
+    }).catch(function (e) {
+      $('sync').textContent = 'Couldn’t reach the sheet: ' + e.message;
+    });
+  }
+
+  /* ---------- dates ---------- */
+  function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function weekStartDate(off) {
+    var t = new Date(); t.setHours(0, 0, 0, 0);
+    var back = (t.getDay() - S.settings.weekStart + 7) % 7;
+    return addDays(t, -back + 7 * (off || 0));
+  }
+  function dayDates() { var s = weekStartDate(weekOffset); var a = []; for (var i = 0; i < 7; i++) a.push(addDays(s, i)); return a; }
+  function curKey() { return ymd(weekStartDate(weekOffset)); }
+
+  /* ---------- board ---------- */
+  function emptyBoard() {
+    return dayDates().map(function (d) {
+      return { recipeId: '', name: '', held: false, crockpot: (S.settings.crockpotDays || []).indexOf(d.getDay()) >= 0 };
+    });
+  }
+  function loadBoard() {
+    var w = S.weeks.filter(function (x) { return x.weekStart === curKey(); })[0];
+    board = emptyBoard();
+    if (w && w.days) w.days.forEach(function (d, i) { if (board[i] && d) board[i] = { recipeId: d.recipeId || '', name: d.name || '', held: !!d.held, crockpot: !!d.crockpot }; });
+  }
+
+  var dirty = false, saveTimer = null;
+  function persist() {
+    dirty = true;
+    var key = curKey(), days = board.map(function (d) { return { recipeId: d.recipeId, name: d.name, held: d.held, crockpot: d.crockpot }; });
+    var w = S.weeks.filter(function (x) { return x.weekStart === key; })[0];
+    if (w) w.days = days; else S.weeks.unshift({ weekStart: key, days: days });
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      if (LOCAL) { saveLocal(); dirty = false; return; }
+      $('sync').textContent = 'Saving…';
+      apiPost({ action: 'saveWeek', weekStart: key, days: days }).then(function () { dirty = false; $('sync').textContent = 'Saved'; setTimeout(function () { if (!dirty) $('sync').textContent = ''; }, 1500); })
+        .catch(function (e) { $('sync').textContent = 'Not saved: ' + e.message; });
+    }, 700);
+  }
+
+  /* ---------- lunch matching ---------- */
+  var FOOD_KEYS = [
+    ['pizza', /pizza|calzone|pizzadilla/], ['taco', /taco|nacho/], ['burrito', /burrito|crunchwrap/], ['quesadilla', /quesadilla/],
+    ['enchilada', /enchilada/], ['burger', /burger|slider(?!.*meatball)/], ['hotdog', /hot ?dog|corn ?dog|\bdogs?\b|brat/],
+    ['nugget', /nugget|nuggie|tender|popcorn chicken|chicken strip/], ['chickensand', /chicken (sandwich|patty|sando)|chikkin/],
+    ['spaghetti', /spaghetti/], ['mac', /\bmac\b|macaroni/], ['lasagna', /lasagna/], ['grilledcheese', /grilled cheese/],
+    ['sloppy', /sloppy/], ['meatball', /meatball/], ['chili', /chil(i|li)\b/], ['soup', /soup/],
+    ['breakfast', /pancake|waffle|french toast|brinner|breakfast/], ['orange', /orange chicken|teriyaki|fried rice|general tso|sesame chicken/],
+    ['fish', /fish/], ['sub', /\bsubs?\b|hoagie/], ['bbq', /bbq|barbecue|pulled pork/], ['pasta', /pasta|ravioli|tortellini|alfredo|penne/]
+  ];
+  function foodKeys(text) {
+    var t = String(text || '').toLowerCase(), out = {};
+    FOOD_KEYS.forEach(function (k) { if (k[1].test(t)) out[k[0]] = 1; });
+    return out;
+  }
+  function lunchOn(dateStr) { var l = S.lunch.filter(function (x) { return x.date === dateStr; })[0]; return l ? l.main : ''; }
+  function clashes(name, dateStr) {
+    var l = lunchOn(dateStr); if (!l || !name) return false;
+    var a = foodKeys(name), b = foodKeys(l);
+    return Object.keys(a).some(function (k) { return b[k]; });
+  }
+
+  /* ---------- picking ---------- */
+  function weeksAgoMade() {
+    var cur = weekStartDate(weekOffset).getTime(), out = {};
+    S.weeks.forEach(function (w) {
+      var t = new Date(w.weekStart + 'T00:00:00').getTime();
+      var ago = Math.round((cur - t) / (7 * 86400000));
+      if (ago < 1 || ago > 4) return;
+      (w.days || []).forEach(function (d) { if (d && d.recipeId && (out[d.recipeId] == null || ago < out[d.recipeId])) out[d.recipeId] = ago; });
+    });
+    return out;
+  }
+  function pickFor(i, used, catCount, recent) {
+    var d = dayDates()[i], dow = d.getDay(), ds = ymd(d), slot = board[i];
+    var defCat = (S.settings.defaults || {})[dow], fav = (S.settings.favorites || {})[dow];
+    var pool = S.recipes.filter(function (r) { return r.active && !used[r.id] && (!slot.crockpot || r.crockpot); });
+    if (!pool.length) pool = S.recipes.filter(function (r) { return r.active && (!slot.crockpot || r.crockpot); });
+    if (!pool.length) return null;
+    var weights = pool.map(function (r) {
+      var w = 1;
+      if (!slot.crockpot && r.crockpot) w *= 0.8;
+      var n = catCount[r.category] || 0;
+      if (n) w *= Math.pow(r.category === 'General' ? 0.45 : 0.12, n);
+      var ago = recent[r.id];
+      if (ago && r.id !== fav) w *= [1, 0.08, 0.3, 0.6, 0.85][ago];
+      if (clashes(r.name, ds)) w *= 0.04;
+      if (r.source === 'web') w *= 0.85;   // a slight lean toward meals the family already makes
+      return w;
+    });
+    // Soft day defaults: the usual category gets about 70% of the odds that day, and the usual
+    // meal about half of its category's share. Repeats and recent meals still pull them down.
+    if (defCat && !slot.crockpot) {
+      var D = 0, O = 0;
+      pool.forEach(function (r, k) { if (r.category === defCat) D += weights[k]; else O += weights[k]; });
+      if (D > 0 && O > 0) {
+        var share = (catCount[defCat] ? 0.35 : 0.7), kk = (share / (1 - share)) * O / D;
+        pool.forEach(function (r, k) { if (r.category === defCat) weights[k] *= kk; });
+        var fi = pool.findIndex(function (r) { return r.id === fav; });
+        if (fi >= 0 && recent[fav] !== 1) {
+          var rest = 0; pool.forEach(function (r, k) { if (r.category === defCat && k !== fi) rest += weights[k]; });
+          if (rest > 0) weights[fi] = Math.max(weights[fi], rest);
+        }
+      }
+    }
+    var total = weights.reduce(function (a, b) { return a + b; }, 0), x = Math.random() * total;
+    for (var k = 0; k < pool.length; k++) { x -= weights[k]; if (x <= 0) return pool[k]; }
+    return pool[pool.length - 1];
+  }
+
+  function spin() {
+    if (spinning) return;
+    var open = board.map(function (b, i) { return b.held ? -1 : i; }).filter(function (i) { return i >= 0; });
+    if (!open.length) { jackpot(); return; }
+    spinning = true; spins++;
+    $('spinBtn').disabled = true;
+    var used = {}, catCount = {}, recent = weeksAgoMade();
+    board.forEach(function (b) { if (b.held && b.recipeId) { used[b.recipeId] = 1; var r = byId[b.recipeId]; if (r) catCount[r.category] = (catCount[r.category] || 0) + 1; } });
+    // Crockpot days pick first so their smaller pool isn't crowded out.
+    open.sort(function (a, b) { return (board[b].crockpot ? 1 : 0) - (board[a].crockpot ? 1 : 0); });
+    var results = {};
+    open.forEach(function (i) {
+      var r = pickFor(i, used, catCount, recent);
+      results[i] = r;
+      if (r) { used[r.id] = 1; catCount[r.category] = (catCount[r.category] || 0) + 1; }
+    });
+    var order = open.slice().sort(function (a, b) { return a - b; });
+    var done = 0;
+    order.forEach(function (i, n) {
+      var r = results[i], prev = board[i].recipeId ? { name: board[i].name, r: byId[board[i].recipeId] } : null;
+      board[i].recipeId = r ? r.id : ''; board[i].name = r ? r.name : '';
+      animateReel(i, prev, r, 650 + n * 230, function () {
+        done++;
+        sfx('stop');
+        if (done === order.length) { spinning = false; $('spinBtn').disabled = false; persist(); renderMachine(); renderLunch(); renderStats(); }
+      });
+    });
+    sfx('spin', 650 + order.length * 230);
+  }
+
+  /* ---------- rendering: machine ---------- */
+  function cellHtml(name, recipe, ds) {
+    if (!name) return '<div class="cell empty"><div class="nm">Spin me</div></div>';
+    var cat = recipe ? recipe.category : '';
+    var meta = '';
+    if (cat) meta += '<span class="chip" style="background:' + CAT_COLORS[cat] + '">' + esc(cat) + '</span>';
+    if (recipe && recipe.crockpot) meta += '<span title="Crockpot friendly">🍲</span>';
+    if (ds && clashes(name, ds)) meta += '<span class="warn" title="Same as school lunch">⚠ lunch</span>';
+    return '<div class="cell"><div class="nm">' + esc(name) + '</div><div class="meta">' + meta + '</div></div>';
+  }
+  function renderMachine() {
+    var dates = dayDates(), today = ymd(new Date());
+    $('machine').innerHTML = board.map(function (b, i) {
+      var d = dates[i], ds = ymd(d);
+      return '<div class="row" data-i="' + i + '">' +
+        '<div class="grip" data-grip="' + i + '" aria-label="Drag to swap">⋮⋮</div>' +
+        '<div class="day' + (ds === today ? ' today' : '') + '"><b>' + DOW[d.getDay()].toUpperCase() + '</b><span>' + (d.getMonth() + 1) + '/' + d.getDate() + '</span></div>' +
+        '<div class="reel' + (b.held ? ' held' : '') + '" data-reel="' + i + '"><div class="strip">' + cellHtml(b.name, byId[b.recipeId], ds) + '</div></div>' +
+        '<button class="pot' + (b.crockpot ? ' on' : '') + '" data-pot="' + i + '" aria-label="Crockpot day" aria-pressed="' + b.crockpot + '">🍲</button>' +
+        '<button class="hold' + (b.held ? ' on' : '') + '" data-hold="' + i + '" aria-pressed="' + b.held + '">' + (b.held ? 'HELD' : 'HOLD') + '</button>' +
+        '</div>';
+    }).join('');
+  }
+  function animateReel(i, prev, r, ms, cb) {
+    var reel = document.querySelector('[data-reel="' + i + '"]'); if (!reel) { cb(); return; }
+    var strip = reel.querySelector('.strip');
+    var act = S.recipes.filter(function (x) { return x.active; });
+    var filler = [];
+    for (var k = 0; k < 14; k++) { var f = act[Math.floor(Math.random() * act.length)]; filler.push(cellHtml(f ? f.name : '', f, null)); }
+    var ds = ymd(dayDates()[i]);
+    strip.innerHTML = cellHtml(prev ? prev.name : '', prev && prev.r, null) + filler.join('') + cellHtml(r ? r.name : '', r, ds);
+    var h = reel.clientHeight, n = strip.children.length - 1;
+    strip.style.transition = 'none'; strip.style.transform = 'translateY(0)';
+    reel.classList.add('blur');
+    void strip.offsetHeight;
+    strip.style.transition = 'transform ' + ms + 'ms cubic-bezier(.2,.75,.25,1.08)';
+    strip.style.transform = 'translateY(' + (-n * h) + 'px)';
+    setTimeout(function () { reel.classList.remove('blur'); }, ms * 0.75);
+    setTimeout(cb, ms + 30);
+  }
+  function renderStats() {
+    var held = board.filter(function (b) { return b.held; }).length;
+    var cats = {}; board.forEach(function (b) { var r = byId[b.recipeId]; if (r) cats[r.category] = 1; });
+    $('stats').textContent = held + '/7 held · ' + Object.keys(cats).length + ' categories' + (spins ? ' · spin #' + spins : '');
+  }
+  function renderLunch() {
+    var dates = dayDates().filter(function (d) { return d.getDay() >= 1 && d.getDay() <= 5; });
+    var any = dates.some(function (d) { return lunchOn(ymd(d)); });
+    var boardByDate = {}; dayDates().forEach(function (d, i) { boardByDate[ymd(d)] = board[i]; });
+    $('lunch').innerHTML = '<h3>School lunch <small>' + (any ? 'mains' : 'no menu for these days yet') + '</small></h3><div class="lgrid">' +
+      dates.map(function (d) {
+        var ds = ymd(d), m = lunchOn(ds), b = boardByDate[ds];
+        var clash = b && b.name && clashes(b.name, ds);
+        return '<div class="lday' + (m ? '' : ' none') + (clash ? ' clash' : '') + '"><b>' + DOW[d.getDay()] + ' ' + (d.getMonth() + 1) + '/' + d.getDate() + '</b>' + esc(m || '—') + '</div>';
+      }).join('') + '</div>';
+  }
+  function renderWeekLbl() {
+    var d = dayDates(), a = d[0], b = d[6];
+    var fmt = function (x) { return x.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); };
+    $('weekLbl').textContent = (weekOffset === 0 ? 'This week · ' : weekOffset === 1 ? 'Next week · ' : '') + fmt(a) + ' – ' + fmt(b);
+  }
+
+  /* ---------- machine interactions ---------- */
+  $('machine').addEventListener('click', function (e) {
+    var t = e.target.closest('button, .reel'); if (!t || spinning) return;
+    if (t.dataset.hold != null) {
+      var b = board[+t.dataset.hold]; if (!b.name) return;
+      b.held = !b.held; sfx('hold'); persist(); renderMachine(); renderStats();
+      if (board.every(function (x) { return x.held; })) jackpot();
+    } else if (t.dataset.pot != null) {
+      var p = board[+t.dataset.pot]; p.crockpot = !p.crockpot;
+      if (p.crockpot && p.recipeId && byId[p.recipeId] && !byId[p.recipeId].crockpot && !p.held) { p.recipeId = ''; p.name = ''; }
+      sfx('hold'); persist(); renderMachine(); renderStats();
+    } else if (t.dataset.reel != null) {
+      openDaySheet(+t.dataset.reel);
+    }
+  });
+  $('spinBtn').addEventListener('click', function () { unlockAudio(); spin(); });
+  $('clearBtn').addEventListener('click', function () { if (spinning) return; board.forEach(function (b) { b.held = false; }); persist(); renderMachine(); renderStats(); });
+  $('holdAllBtn').addEventListener('click', function () { if (spinning) return; board.forEach(function (b) { if (b.name) b.held = true; }); persist(); renderMachine(); renderStats(); if (board.every(function (x) { return x.held; })) jackpot(); });
+  $('prev').addEventListener('click', function () { if (spinning) return; weekOffset--; loadBoard(); renderAll(); });
+  $('next').addEventListener('click', function () { if (spinning) return; weekOffset++; loadBoard(); renderAll(); });
+
+  // Drag a grip onto another day to swap the two meals (and their holds). Pointer events, so it works on iPhone.
+  (function dragSwap() {
+    var from = -1, ghost = null, over = -1, offY = 0;
+    function rowAt(y) {
+      var rows = document.querySelectorAll('#machine .row');
+      for (var k = 0; k < rows.length; k++) { var r = rows[k].getBoundingClientRect(); if (y >= r.top && y <= r.bottom) return k; }
+      return -1;
+    }
+    $('machine').addEventListener('pointerdown', function (e) {
+      var g = e.target.closest('[data-grip]'); if (!g || spinning) return;
+      e.preventDefault();
+      from = +g.dataset.grip;
+      var row = g.closest('.row'), rect = row.getBoundingClientRect();
+      offY = e.clientY - rect.top;
+      ghost = row.cloneNode(true); ghost.className = 'row ghost-row';
+      ghost.style.left = rect.left + 'px'; ghost.style.top = rect.top + 'px'; ghost.style.width = rect.width + 'px';
+      document.body.appendChild(ghost);
+      row.classList.add('dragging');
+      g.setPointerCapture(e.pointerId);
+    });
+    $('machine').addEventListener('pointermove', function (e) {
+      if (from < 0) return;
+      ghost.style.top = (e.clientY - offY) + 'px';
+      var o = rowAt(e.clientY);
+      if (o !== over) {
+        document.querySelectorAll('#machine .row.drop').forEach(function (r) { r.classList.remove('drop'); });
+        over = o; if (o >= 0 && o !== from) document.querySelectorAll('#machine .row')[o].classList.add('drop');
+      }
+    });
+    function end() {
+      if (from < 0) return;
+      if (ghost) ghost.remove();
+      if (over >= 0 && over !== from) {
+        var a = board[from], b = board[over];
+        var tmp = { recipeId: a.recipeId, name: a.name, held: a.held };
+        a.recipeId = b.recipeId; a.name = b.name; a.held = b.held;
+        b.recipeId = tmp.recipeId; b.name = tmp.name; b.held = tmp.held;
+        sfx('hold'); persist();
+      }
+      from = -1; over = -1; ghost = null;
+      renderMachine(); renderLunch();
+    }
+    $('machine').addEventListener('pointerup', end);
+    $('machine').addEventListener('pointercancel', end);
+  })();
+
+  /* ---------- day sheet: details + manual pick ---------- */
+  function openSheet(html) {
+    var s = document.createElement('div'); s.className = 'scrim';
+    s.innerHTML = '<div class="sheet">' + html + '</div>';
+    s.addEventListener('click', function (e) { if (e.target === s) s.remove(); });
+    document.body.appendChild(s);
+    return s;
+  }
+  function recipeDetail(r) {
+    if (!r) return '';
+    return '<p><span class="chip" style="background:' + CAT_COLORS[r.category] + '">' + esc(r.category) + '</span> ' + (r.crockpot ? '🍲 crockpot' : '') + '</p>' +
+      (r.ingredients.length ? '<label class="f">Ingredients</label><ul>' + r.ingredients.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p class="note">No ingredients yet.</p>') +
+      (r.url ? '<p><a href="' + esc(r.url) + '" target="_blank" rel="noopener">Recipe link ↗</a></p>' : '') +
+      (r.notes ? '<p class="note">' + esc(r.notes) + '</p>' : '');
+  }
+  function openDaySheet(i) {
+    var b = board[i], r = byId[b.recipeId], d = dayDates()[i];
+    var lunch = lunchOn(ymd(d));
+    var s = openSheet('<h2>' + DOW_LONG[d.getDay()] + '</h2>' +
+      (b.name ? '<h3 style="margin:4px 0">' + esc(b.name) + '</h3>' + recipeDetail(r) : '<p class="note">Nothing here yet.</p>') +
+      (lunch ? '<p class="note">School lunch: ' + esc(lunch) + '</p>' : '') +
+      '<label class="f">Pick a meal for this day</label><input class="field" id="pickQ" type="search" placeholder="Search">' +
+      '<div class="pick" id="pickList"></div>' +
+      '<div class="acts">' + (r ? '<button class="btn ghost" id="editThis">Edit recipe</button>' : '') +
+      (b.name ? '<button class="btn danger" id="clearDay">Clear day</button>' : '') + '<button class="btn" id="closeSheet">Done</button></div>');
+    function list() {
+      var q = s.querySelector('#pickQ').value.toLowerCase();
+      var items = S.recipes.filter(function (x) { return x.active && (!b.crockpot || x.crockpot) && (!q || x.name.toLowerCase().indexOf(q) >= 0); })
+        .sort(function (a, c) { return a.name.localeCompare(c.name); });
+      s.querySelector('#pickList').innerHTML = items.map(function (x) {
+        return '<button data-id="' + esc(x.id) + '"><span>' + esc(x.name) + '</span><span class="chip" style="background:' + CAT_COLORS[x.category] + '">' + esc(x.category) + '</span></button>';
+      }).join('') || '<p class="note">No matches' + (b.crockpot ? ' among crockpot meals' : '') + '.</p>';
+    }
+    list();
+    s.querySelector('#pickQ').addEventListener('input', list);
+    s.querySelector('#pickList').addEventListener('click', function (e) {
+      var t = e.target.closest('[data-id]'); if (!t) return;
+      var x = byId[t.dataset.id]; b.recipeId = x.id; b.name = x.name; b.held = true;
+      persist(); renderMachine(); renderLunch(); renderStats(); s.remove();
+      if (board.every(function (y) { return y.held; })) jackpot();
+    });
+    s.querySelector('#closeSheet').addEventListener('click', function () { s.remove(); });
+    if (s.querySelector('#clearDay')) s.querySelector('#clearDay').addEventListener('click', function () { b.recipeId = ''; b.name = ''; b.held = false; persist(); renderMachine(); renderLunch(); renderStats(); s.remove(); });
+    if (s.querySelector('#editThis')) s.querySelector('#editThis').addEventListener('click', function () { s.remove(); editRecipe(r); });
+  }
+
+  /* ---------- recipe book ---------- */
+  var bookCat = 'All', showRetired = true;
+  function renderBook() {
+    $('catFilter').innerHTML = ['All'].concat(CATS).concat(['🍲 Crockpot', 'Retired']).map(function (c) {
+      return '<button data-cat="' + esc(c) + '" class="' + (c === bookCat ? 'on' : '') + '">' + esc(c) + '</button>';
+    }).join('');
+    var q = $('q').value.toLowerCase().trim();
+    var items = S.recipes.filter(function (r) {
+      if (bookCat === 'Retired') { if (r.active) return false; }
+      else if (bookCat === '🍲 Crockpot') { if (!r.crockpot) return false; }
+      else if (bookCat !== 'All' && r.category !== bookCat) return false;
+      if (q && (r.name + ' ' + r.ingredients.join(' ')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return (b.active - a.active) || a.name.localeCompare(b.name); });
+    var active = S.recipes.filter(function (r) { return r.active; }).length;
+    $('bookCount').textContent = items.length + ' shown · ' + active + ' in rotation · ' + (S.recipes.length - active) + ' retired. Uncheck a meal to take it out of rotation.';
+    $('bookList').innerHTML = items.map(function (r) {
+      return '<div class="ritem' + (r.active ? '' : ' off') + '"><input type="checkbox" data-active="' + esc(r.id) + '"' + (r.active ? ' checked' : '') + ' aria-label="In rotation">' +
+        '<div data-edit="' + esc(r.id) + '"><div class="nm">' + esc(r.name) + (r.crockpot ? ' 🍲' : '') + '</div><div class="sub">' +
+        (r.ingredients.length ? esc(r.ingredients.slice(0, 4).join(', ')) + (r.ingredients.length > 4 ? '…' : '') : 'no ingredients yet') + '</div></div>' +
+        '<span class="chip" style="background:' + CAT_COLORS[r.category] + '">' + esc(r.category) + '</span></div>';
+    }).join('');
+  }
+  $('q').addEventListener('input', renderBook);
+  $('catFilter').addEventListener('click', function (e) { var t = e.target.closest('[data-cat]'); if (!t) return; bookCat = t.dataset.cat; renderBook(); });
+  $('bookList').addEventListener('change', function (e) {
+    var id = e.target.dataset.active; if (!id) return;
+    var r = byId[id]; r.active = e.target.checked; renderBook();
+    if (LOCAL) saveLocal();
+    else apiPost({ action: 'setActive', id: id, active: r.active }).catch(function (err) { toast('Not saved: ' + err.message); });
+  });
+  $('bookList').addEventListener('click', function (e) { var t = e.target.closest('[data-edit]'); if (t) editRecipe(byId[t.dataset.edit]); });
+  $('addBtn').addEventListener('click', function () { editRecipe(null); });
+
+  function editRecipe(r) {
+    var x = r || { id: '', name: '', category: 'General', crockpot: false, active: true, ingredients: [], url: '', notes: '', source: 'family' };
+    var s = openSheet('<h2>' + (r ? 'Edit meal' : 'New meal') + '</h2>' +
+      '<label class="f">Name</label><input class="field" id="eName" value="' + esc(x.name) + '">' +
+      '<label class="f">Category</label><select id="eCat">' + CATS.map(function (c) { return '<option' + (c === x.category ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select>' +
+      '<label style="display:flex;gap:10px;align-items:center;margin:12px 0 0"><input type="checkbox" id="eCp"' + (x.crockpot ? ' checked' : '') + ' style="width:20px;height:20px;accent-color:var(--gold)"> Works in the crockpot</label>' +
+      '<label style="display:flex;gap:10px;align-items:center;margin:8px 0 0"><input type="checkbox" id="eAct"' + (x.active ? ' checked' : '') + ' style="width:20px;height:20px;accent-color:var(--gold)"> In rotation</label>' +
+      '<label class="f">Ingredients (one per line)</label><textarea id="eIng" rows="7">' + esc(x.ingredients.join('\n')) + '</textarea>' +
+      '<label class="f">Recipe link</label><input class="field" id="eUrl" inputmode="url" value="' + esc(x.url) + '">' +
+      '<label class="f">Notes</label><textarea id="eNotes" rows="2">' + esc(x.notes) + '</textarea>' +
+      '<div class="acts"><button class="btn" id="eSave">Save</button><button class="btn ghost" id="eCancel">Cancel</button></div>');
+    s.querySelector('#eCancel').addEventListener('click', function () { s.remove(); });
+    s.querySelector('#eSave').addEventListener('click', function () {
+      var name = s.querySelector('#eName').value.trim(); if (!name) { toast('Name it first'); return; }
+      var rec = {
+        id: x.id, name: name, category: s.querySelector('#eCat').value, crockpot: s.querySelector('#eCp').checked, active: s.querySelector('#eAct').checked,
+        ingredients: s.querySelector('#eIng').value.split('\n').map(function (v) { return v.trim(); }).filter(Boolean),
+        url: s.querySelector('#eUrl').value.trim(), notes: s.querySelector('#eNotes').value.trim(), source: x.source || 'family'
+      };
+      var btn = s.querySelector('#eSave'); btn.disabled = true; btn.textContent = 'Saving…';
+      var done = function (saved) {
+        var i = S.recipes.findIndex(function (y) { return y.id === saved.id; });
+        if (i >= 0) S.recipes[i] = saved; else S.recipes.push(saved);
+        index(); board.forEach(function (b) { if (b.recipeId === saved.id) b.name = saved.name; });
+        renderAll(); s.remove(); toast('Saved');
+      };
+      if (LOCAL) {
+        if (!rec.id) rec.id = rec.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).slice(2, 6);
+        done(rec); saveLocal();
+      } else {
+        apiPost({ action: 'upsertRecipe', recipe: rec }).then(function (j) { done(j.recipe); })
+          .catch(function (e) { btn.disabled = false; btn.textContent = 'Save'; toast('Not saved: ' + e.message); });
+      }
+    });
+  }
+
+  /* ---------- shopping list ---------- */
+  var shopMode = 'meal';
+  function shopKey() { return 'mealio.shop.' + curKey(); }
+  function shopChecked() { try { return JSON.parse(ls(shopKey()) || '{}'); } catch (e) { return {}; } }
+  function norm(s) { return s.toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function shopData() {
+    var dates = dayDates(), meals = [], combined = {};
+    board.forEach(function (b, i) {
+      var r = byId[b.recipeId]; if (!r) return;
+      meals.push({ day: DOW[dates[i].getDay()], name: r.name, items: r.ingredients });
+      r.ingredients.forEach(function (ing) { var k = norm(ing); (combined[k] = combined[k] || { label: ing, from: [] }).from.push(DOW[dates[i].getDay()]); });
+    });
+    return { meals: meals, combined: combined };
+  }
+  function renderList() {
+    document.querySelectorAll('.seg button').forEach(function (b) { b.classList.toggle('on', b.dataset.mode === shopMode); });
+    var d = shopData(), ck = shopChecked(), html = '';
+    if (!d.meals.length) html = '<p class="note">Spin up a week first.</p>';
+    else if (shopMode === 'meal') {
+      html = d.meals.map(function (m) {
+        return '<h4>' + esc(m.day) + ' · ' + esc(m.name) + '</h4>' + (m.items.length ? m.items.map(function (it) {
+          var k = norm(it); return '<label class="' + (ck[k] ? 'done' : '') + '"><input type="checkbox" data-k="' + esc(k) + '"' + (ck[k] ? ' checked' : '') + '><span>' + esc(it) + '</span></label>';
+        }).join('') : '<p class="note">No ingredients saved for this one.</p>');
+      }).join('');
+    } else {
+      html = Object.keys(d.combined).sort().map(function (k) {
+        var c = d.combined[k];
+        return '<label class="' + (ck[k] ? 'done' : '') + '"><input type="checkbox" data-k="' + esc(k) + '"' + (ck[k] ? ' checked' : '') + '><span>' + esc(c.label) +
+          (c.from.length > 1 ? ' <span class="from">×' + c.from.length + ' (' + c.from.join(', ') + ')</span>' : ' <span class="from">' + c.from[0] + '</span>') + '</span></label>';
+      }).join('');
+    }
+    $('shopBody').innerHTML = html;
+  }
+  document.querySelector('.seg').addEventListener('click', function (e) { var t = e.target.closest('[data-mode]'); if (t) { shopMode = t.dataset.mode; renderList(); } });
+  $('shopBody').addEventListener('change', function (e) {
+    var k = e.target.dataset.k; if (k == null) return;
+    var ck = shopChecked(); if (e.target.checked) ck[k] = 1; else delete ck[k];
+    ls(shopKey(), JSON.stringify(ck)); renderList();
+  });
+  $('resetList').addEventListener('click', function () { ls(shopKey(), null); renderList(); });
+  $('shareList').addEventListener('click', function () {
+    var d = shopData(), ck = shopChecked();
+    var lines = Object.keys(d.combined).sort().filter(function (k) { return !ck[k]; }).map(function (k) { return '☐ ' + d.combined[k].label; });
+    var text = 'Groceries for ' + $('weekLbl').textContent.replace(/^.*· /, '') + '\n' + lines.join('\n');
+    if (navigator.share) navigator.share({ text: text }).catch(function () {});
+    else navigator.clipboard.writeText(text).then(function () { toast('Copied'); });
+  });
+
+  /* ---------- settings ---------- */
+  function renderSettings() {
+    var st = S.settings;
+    $('weekStart').innerHTML = DOW_LONG.map(function (d, i) { return '<option value="' + i + '"' + (i === st.weekStart ? ' selected' : '') + '>' + d + '</option>'; }).join('');
+    var order = []; for (var k = 0; k < 7; k++) order.push((st.weekStart + k) % 7);
+    $('dayRules').innerHTML = order.map(function (dow) {
+      var cat = (st.defaults || {})[dow] || '', fav = (st.favorites || {})[dow] || '';
+      var favOpts = S.recipes.filter(function (r) { return r.active && (!cat || r.category === cat); }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+      return '<div class="srow" data-dow="' + dow + '"><span>' + DOW[dow] + '</span>' +
+        '<select data-f="cat"><option value="">Any</option>' + CATS.map(function (c) { return '<option' + (c === cat ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select>' +
+        '<select data-f="fav"><option value="">None</option>' + favOpts.map(function (r) { return '<option value="' + esc(r.id) + '"' + (r.id === fav ? ' selected' : '') + '>' + esc(r.name) + '</option>'; }).join('') + '</select>' +
+        '<input type="checkbox" data-f="cp"' + ((st.crockpotDays || []).indexOf(dow) >= 0 ? ' checked' : '') + '></div>';
+    }).join('');
+    $('sound').checked = st.sound !== false;
+    $('connInfo').textContent = LOCAL
+      ? 'Not connected to the Meals sheet. Everything is saved on this device only. Open the setup link from the README to connect.'
+      : 'Connected to the Meals sheet. Changes sync to the other phone.';
+    $('copyLink').hidden = LOCAL; $('disconnect').hidden = LOCAL;
+  }
+  $('dayRules').addEventListener('change', function (e) {
+    if (e.target.dataset.f === 'cat') {   // refresh that row's meal list to the new category
+      var row = e.target.closest('.srow'), cat = e.target.value, sel = row.querySelector('[data-f=fav]');
+      var opts = S.recipes.filter(function (r) { return r.active && (!cat || r.category === cat); }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+      sel.innerHTML = '<option value="">None</option>' + opts.map(function (r) { return '<option value="' + esc(r.id) + '">' + esc(r.name) + '</option>'; }).join('');
+    }
+  });
+  $('saveSettings').addEventListener('click', function () {
+    var st = { weekStart: +$('weekStart').value, defaults: {}, favorites: {}, crockpotDays: [], sound: $('sound').checked };
+    document.querySelectorAll('#dayRules .srow').forEach(function (row) {
+      var dow = +row.dataset.dow;
+      var c = row.querySelector('[data-f=cat]').value, f = row.querySelector('[data-f=fav]').value;
+      if (c) st.defaults[dow] = c; if (f) st.favorites[dow] = f;
+      if (row.querySelector('[data-f=cp]').checked) st.crockpotDays.push(dow);
+    });
+    var wsChanged = st.weekStart !== S.settings.weekStart;
+    S.settings = mergeSettings(st);
+    if (wsChanged) { weekOffset = 0; loadBoard(); }
+    renderAll();
+    if (LOCAL) { saveLocal(); toast('Saved'); }
+    else apiPost({ action: 'setSettings', settings: st }).then(function () { toast('Saved'); }).catch(function (e) { toast('Not saved: ' + e.message); });
+  });
+  $('weekStart').addEventListener('change', function () {
+    // Re-render the day rows in the new order without losing unsaved picks.
+    var tmp = JSON.parse(JSON.stringify(S.settings)); tmp.weekStart = +$('weekStart').value;
+    var keep = S.settings; S.settings = tmp; renderSettings(); S.settings = keep;
+  });
+  $('copyLink').addEventListener('click', function () {
+    var link = location.origin + location.pathname + '?api=' + encodeURIComponent(API) + '&token=' + encodeURIComponent(TOKEN);
+    if (navigator.share) navigator.share({ text: link }).catch(function () {}); else navigator.clipboard.writeText(link).then(function () { toast('Link copied'); });
+  });
+  $('disconnect').addEventListener('click', function () { if (!confirm('Disconnect this phone from the Meals sheet?')) return; ls('mealio.api', null); ls('mealio.token', null); location.reload(); });
+
+  /* ---------- views ---------- */
+  document.querySelector('.tabs').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-view]'); if (!t) return;
+    document.querySelectorAll('.tabs button').forEach(function (b) { b.classList.toggle('on', b === t); });
+    ['spin', 'book', 'list', 'settings'].forEach(function (v) { $('v-' + v).hidden = v !== t.dataset.view; });
+    if (t.dataset.view === 'list') renderList();
+    window.scrollTo(0, 0);
+  });
+  function renderAll() { renderWeekLbl(); renderMachine(); renderStats(); renderLunch(); renderBook(); renderSettings(); if (!$('v-list').hidden) renderList(); }
+
+  /* ---------- sound ---------- */
+  var ac = null;
+  function unlockAudio() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ac && ac.state === 'suspended') ac.resume(); }
+  function beep(freq, at, dur, type, vol) {
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'square'; o.frequency.value = freq; g.gain.value = vol || 0.04;
+    g.gain.setValueAtTime(vol || 0.04, ac.currentTime + at); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + at + dur);
+    o.connect(g); g.connect(ac.destination); o.start(ac.currentTime + at); o.stop(ac.currentTime + at + dur + 0.02);
+  }
+  function sfx(kind, ms) {
+    if (!ac || S.settings.sound === false) return;
+    try {
+      if (kind === 'spin') { for (var t = 0; t < ms / 1000; t += 0.07) beep(500 + Math.random() * 300, t, 0.03, 'square', 0.025); }
+      else if (kind === 'stop') beep(880, 0, 0.12, 'triangle', 0.08);
+      else if (kind === 'hold') beep(330, 0, 0.06, 'square', 0.05);
+      else if (kind === 'jackpot') [523, 659, 784, 1047, 784, 1047].forEach(function (f, i) { beep(f, i * 0.11, 0.18, 'triangle', 0.09); });
+    } catch (e) {}
+    if (kind === 'stop' && navigator.vibrate) navigator.vibrate(12);
+  }
+  function jackpot() {
+    sfx('jackpot');
+    var j = document.createElement('div'); j.className = 'jackpot'; j.innerHTML = '<span>JACKPOT!</span>'; document.body.appendChild(j);
+    var colors = ['#f5c542', '#e8344e', '#3fd18b', '#2f7fe0', '#fff'];
+    for (var i = 0; i < 70; i++) {
+      var c = document.createElement('i'); c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw'; c.style.background = colors[i % colors.length];
+      c.style.animationDuration = (1.4 + Math.random() * 1.6) + 's'; c.style.animationDelay = Math.random() * 0.4 + 's';
+      document.body.appendChild(c); setTimeout(c.remove.bind(c), 3600);
+    }
+    setTimeout(function () { j.remove(); }, 1700);
+  }
+
+  if (/[?&]debug=1/.test(location.search)) window.__mealio = { pickFor: pickFor, board: function () { return board; }, byId: function () { return byId; }, weeksAgoMade: weeksAgoMade };
+
+  /* ---------- go ---------- */
+  load(true);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && !LOCAL && !spinning && !dirty) load(false); });
+})();
+</script>
+</body>
+</html>
