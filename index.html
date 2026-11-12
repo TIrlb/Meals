@@ -459,7 +459,7 @@
     var dates = dayDates(), today = ymd(new Date());
     var anyLunch = dates.some(function (d) { return lunchOn(ymd(d)); });
     $('machine').classList.toggle('nolunch', !anyLunch);
-    $('machine').innerHTML = '<div class="mhead"><span>Day</span><span class="mh-lunch">Lunch</span><span>Dinner</span><span></span><span></span></div>' +
+    $('machine').innerHTML = '<div class="mhead"><span>Day</span><span class="mh-lunch">SPX Lunch</span><span>Dinner</span><span></span><span></span></div>' +
       board.map(function (b, i) {
       var d = dates[i], ds = ymd(d), lunch = lunchOn(ds);
       var lunchShort = lunch.replace(/\s*\([^)]*\)/g, '').trim() || lunch;
