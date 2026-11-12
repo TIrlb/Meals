@@ -208,7 +208,7 @@ function setField_(id, field, value) {
   sheet_('Recipes').getRange(hit._row, col).setValue(value);
 }
 
-const SETTING_KEYS = ['weekStart', 'defaults', 'crockpotDays', 'favorites', 'sound'];
+const SETTING_KEYS = ['weekStart', 'defaults', 'lockDays', 'crockpotDays', 'favorites'];
 function setSettings_(n) {
   const sh = sheet_('Settings');
   const existing = rows_('Settings');

@@ -1,6 +1,6 @@
 # Mealio Dealio
 
-A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe book, HOLD locks the ones you like, and you spin again until the week looks right. Drag a day's grip (⋮⋮) onto another day to swap them. Tap 🍲 on a day to make it a crockpot night, so it only lands on crockpot meals. Tap a meal to see ingredients, pick one by hand, or edit it.
+A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe book, HOLD locks the ones you like, and you spin again until the week looks right. Drag a day label (TUE, WED…) onto another day to swap their dinners. Each day's school lunch main sits next to its dinner and turns orange when they match. Tap 🍲 on a day to make it a crockpot night, so it only lands on crockpot meals. Tap a meal to see ingredients, pick one by hand, or edit it.
 
 | Piece | What it is |
 |---|---|
@@ -9,11 +9,13 @@ A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe
 | `data/recipes.json` | Seed recipe book. Used only when the page isn't connected to the sheet. |
 
 ## How picks work
-- No meal repeats within a week, and the same category is heavily discounted the more it's already on the board. Average is ~5.8 categories per 7 days. That's a soft rule: a crockpot salsa chicken on Wednesday is the week's Mexican, and Taco Tuesday's odds drop to match.
-- **Usual category** per weekday (Settings) gets about 70% of that day's odds. Defaults: Tue Mexican, Fri Pizza Night, Sat Grillin. **Usual meal** gets about half its category's share (Sat: Burgers & dogs).
-- Meals planned in the last few weeks are discounted (last week ×0.08, two weeks ×0.3, three ×0.6). The usual meal is exempt.
-- If a meal matches that day's school lunch main (pizza, tacos, nuggets, spaghetti, etc.), its odds drop 25×. It's flagged ⚠ on the reel and in the lunch strip if it lands anyway.
+- **Locked days** (🔒 in Settings): Tue Mexican, Fri Pizza Night, Sat Grillin. Those days only spin that category. A crockpot day that's also locked spins crockpot meals in that category, or any crockpot meal if the category has none. Locked days are picked first, so the other days steer around their categories.
+- No meal repeats within a week, and a category is heavily discounted the more often it's already on the board. Unlocked days with a category set lean about 70% toward it.
+- **Usual meal** gets about half of its day's odds (Sat: Burgers & dogs).
+- Meals from the last few weeks are discounted (last week ×0.08, two weeks ×0.3, three ×0.6). The usual meal is exempt.
+- If a meal matches that day's school lunch main (pizza, tacos, nuggets, carnitas, pot roast, etc.), its odds drop 25×.
 - Web-sourced recipes get a slight discount vs. family ones.
+- Picking a meal by hand (tap the reel) ignores all of this. On a locked day, that category is listed first.
 
 ## The sheet
 [Meals](https://docs.google.com/spreadsheets/d/1cyy4fYicx1edYd3nw8rAUE7pF_wf20zFoJEUjTgU6Xk/edit) is the source of truth, so bulk edits can be made there directly.
@@ -38,7 +40,7 @@ Without step 6 the page runs in local mode, keeping everything on that device on
 ## School lunch
 The school site blocks automated fetches, so this runs in two steps:
 1. **`grabFlyer`** (Apps Script, daily 5am) asks FamDash's backend for the current flyer URL, which it already resolves. When the URL changes, it copies the image into the *Meals Lunch Flyers* Drive folder.
-2. A **Claude scheduled task** (Sun + Wed evenings) looks for a flyer there that isn't in the Lunch tab yet. It reads the calendar and writes one row per school day: date, main entrée only, flyer file name.
+2. A **Claude scheduled task** (Sun + Wed, 5:47pm ET) looks for a flyer there that isn't in the Lunch tab yet. It reads the calendar and writes one row per school day: date, main entrée only, flyer file name.
 
 If a month is wrong or missing, fix the rows in the Lunch tab directly. If FamDash can't find the flyer, set the `LUNCH_IMAGE_URL` script property to the image address and run `grabFlyer`.
 

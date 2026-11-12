@@ -45,12 +45,18 @@
   /* machine */
   .machine { background: linear-gradient(var(--felt), #21134a); border-radius: 20px; padding: 10px 8px;
     box-shadow: inset 0 0 0 2px var(--line), 0 12px 30px rgba(0,0,0,.35); }
-  .row { display: grid; grid-template-columns: 22px 46px 1fr 40px 62px; align-items: center; gap: 6px;
+  .machine { --cols: 40px 74px minmax(0,1fr) 32px 50px; }
+  .machine.nolunch { --cols: 46px minmax(0,1fr) 36px 56px; }
+  .machine.nolunch .lun, .machine.nolunch .mh-lunch { display: none; }
+  .mhead { display: grid; grid-template-columns: var(--cols); gap: 4px; padding: 0 2px 4px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+  .row { display: grid; grid-template-columns: var(--cols); align-items: center; gap: 4px;
     height: calc(var(--row) + 10px); border-radius: 12px; padding: 0 2px; transition: background .15s, transform .15s; }
   .row.drop { background: rgba(245,197,66,.18); }
   .row.dragging { opacity: .35; }
-  .grip { height: 100%; display: grid; place-items: center; color: var(--muted); touch-action: none; cursor: grab; font-size: 18px; letter-spacing: -3px; }
-  .day { text-align: center; line-height: 1.05; }
+  .day { text-align: center; line-height: 1.05; height: 100%; display: flex; flex-direction: column; justify-content: center;
+    touch-action: none; cursor: grab; border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  .day:active { background: rgba(245,197,66,.12); }
   .day b { display: block; font: 400 15px Bungee, sans-serif; color: var(--gold); }
   .day span { font-size: 12px; color: var(--muted); }
   .day.today b { color: #fff; text-shadow: 0 0 10px var(--gold); }
@@ -65,9 +71,9 @@
   .warn { color: #c2410c; font-weight: 700; white-space: nowrap; }
   .cell.empty .nm { color: #b6a688; font-weight: 500; }
   .reel.blur .strip { filter: blur(1.2px); }
-  .pot { height: 40px; border-radius: 10px; font-size: 20px; filter: grayscale(1); opacity: .45; background: rgba(0,0,0,.2); }
+  .pot { height: 40px; border-radius: 10px; font-size: 17px; filter: grayscale(1); opacity: .45; background: rgba(0,0,0,.2); }
   .pot.on { filter: none; opacity: 1; background: rgba(245,197,66,.22); box-shadow: inset 0 0 0 2px var(--gold); }
-  .hold { height: 44px; border-radius: 10px; font: 400 13px Bungee, sans-serif; background: #3a2a6b; color: #d8ccff;
+  .hold { height: 44px; border-radius: 10px; font: 400 11.5px Bungee, sans-serif; background: #3a2a6b; color: #d8ccff;
     box-shadow: 0 3px 0 #1b1040; }
   .hold.on { background: var(--red); color: #fff; box-shadow: 0 3px 0 var(--red2), 0 0 12px rgba(232,52,78,.6); }
   .hold:active { transform: translateY(2px); box-shadow: none; }
@@ -81,14 +87,11 @@
   .stats { text-align: center; color: var(--muted); font-size: 12px; }
 
   /* lunch strip */
-  .lunch { margin: 14px 0 8px; background: #fffaf0; color: var(--ink); border-radius: 14px; padding: 10px 10px 8px; }
-  .lunch h3 { margin: 0 0 6px; font: 400 13px Bungee, sans-serif; color: #8f1a2e; display: flex; justify-content: space-between; }
-  .lunch h3 small { font: 500 11px Rubik, sans-serif; color: #8a7a5a; }
-  .lgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-  .lday { background: #f4ead2; border-radius: 8px; padding: 5px 6px; min-height: 52px; font-size: 12px; }
-  .lday b { display: block; font-size: 10.5px; color: #8a7a5a; text-transform: uppercase; }
-  .lday.clash { background: #ffe1d1; box-shadow: inset 0 0 0 2px #f97316; }
-  .lday.none { opacity: .5; }
+  .lun { height: var(--row); border-radius: 8px; padding: 4px 6px; background: rgba(255,255,255,.07); color: #e4dbff;
+    font-size: 11px; line-height: 1.2; font-weight: 500; display: flex; align-items: center; overflow: hidden; }
+  .lun span { overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .lun.none { background: none; color: #6f5fa3; justify-content: center; }
+  .lun.clash { background: #ffe1d1; color: #7c2d12; font-weight: 700; box-shadow: inset 0 0 0 2px #f97316; }
 
   /* jackpot */
   .jackpot { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 50; }
@@ -126,7 +129,7 @@
   .seg { display: flex; background: #140b2b; border-radius: 10px; padding: 3px; margin-bottom: 8px; }
   .seg button { flex: 1; padding: 7px; border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--muted); }
   .seg button.on { background: #3a2a6b; color: #fff; }
-  .srow { display: grid; grid-template-columns: 54px 1fr 1fr 34px; gap: 6px; align-items: center; margin-bottom: 6px; font-size: 13px; }
+  .srow { display: grid; grid-template-columns: 38px 1fr 30px 1fr 30px; gap: 6px; align-items: center; margin-bottom: 6px; font-size: 13px; }
   .srow select { padding: 7px; font-size: 13px; }
   .srow input { width: 22px; height: 22px; accent-color: var(--gold); justify-self: center; }
   .shead { font-size: 11px; color: var(--muted); }
@@ -152,7 +155,9 @@
   .tabs button.on { color: var(--gold); }
   .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: #000c; padding: 8px 14px; border-radius: 10px; z-index: 60; font-size: 13px; }
   .ghost-row { position: fixed; z-index: 45; pointer-events: none; opacity: .92; transform: scale(1.03); box-shadow: 0 12px 30px rgba(0,0,0,.5); border-radius: 12px; background: var(--felt); }
-  @media (max-width: 380px) { :root { --row: 58px; } .row { grid-template-columns: 18px 40px 1fr 36px 54px; gap: 4px; } .cell .nm { font-size: 14px; } }
+  .cell .nm { font-size: 14px; }
+  .day b { font-size: 13px; } .day span { font-size: 11px; }
+  @media (max-width: 380px) { :root { --row: 60px; } .machine { --cols: 36px 68px minmax(0,1fr) 28px 44px; } .cell { padding: 5px 7px; } .cell .nm { font-size: 13px; } .hold { font-size: 10px; } }
 </style>
 </head>
 <body>
@@ -172,7 +177,6 @@
       <button class="side" id="holdAllBtn">Hold all</button>
     </div>
     <div class="stats" id="stats"></div>
-    <section class="lunch" id="lunch"></section>
   </main>
 
   <main id="v-book" hidden>
@@ -199,10 +203,9 @@
       <h2>Settings</h2>
       <label class="note" for="weekStart">Week starts on</label>
       <select id="weekStart" style="margin:4px 0 14px"></select>
-      <div class="srow shead"><span>Day</span><span>Usual category</span><span>Usual meal</span><span>🍲</span></div>
+      <div class="srow shead"><span>Day</span><span>Category</span><span>🔒</span><span>Usual meal</span><span>🍲</span></div>
       <div id="dayRules"></div>
-      <p class="note">Usual category and meal are soft: the machine leans that way on those days but can still land elsewhere. 🍲 marks that day as crockpot by default on a new week.</p>
-      <label style="display:flex;gap:10px;align-items:center;margin:12px 0"><input type="checkbox" id="sound" style="width:20px;height:20px;accent-color:var(--gold)"> Sound effects</label>
+      <p class="note">🔒 locks a day to its category: Tuesday only spins Mexican. Unlocked categories are soft, so the machine leans that way but can land elsewhere. The usual meal gets about half of its day's odds. 🍲 makes that day crockpot by default on a new week; on a locked day it spins crockpot meals in that category when there are any.</p>
       <div class="acts" style="display:flex;gap:8px"><button class="btn" id="saveSettings">Save settings</button></div>
     </section>
     <section class="panel">
@@ -227,7 +230,7 @@
   var CAT_COLORS = { 'Pizza Night': '#e8344e', 'Mexican': '#e07a10', 'Asian': '#c0392b', 'Soups': '#2f7fe0', 'Grillin': '#7a4b1c', 'Italian': '#2e9d4f', 'General': '#7357c9' };
   var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   var DOW_LONG = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  var DEFAULT_SETTINGS = { weekStart: 2, defaults: { 2: 'Mexican', 5: 'Pizza Night', 6: 'Grillin' }, crockpotDays: [], favorites: { 6: 'burgers-dogs' }, sound: true };
+  var DEFAULT_SETTINGS = { weekStart: 2, defaults: { 2: 'Mexican', 5: 'Pizza Night', 6: 'Grillin' }, lockDays: [2, 5, 6], crockpotDays: [], favorites: { 6: 'burgers-dogs' } };
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -367,11 +370,18 @@
     });
     return out;
   }
+  function isLocked(dow) { return !!(S.settings.defaults || {})[dow] && (S.settings.lockDays || []).indexOf(dow) >= 0; }
   function pickFor(i, used, catCount, recent) {
     var d = dayDates()[i], dow = d.getDay(), ds = ymd(d), slot = board[i];
     var defCat = (S.settings.defaults || {})[dow], fav = (S.settings.favorites || {})[dow];
-    var pool = S.recipes.filter(function (r) { return r.active && !used[r.id] && (!slot.crockpot || r.crockpot); });
-    if (!pool.length) pool = S.recipes.filter(function (r) { return r.active && (!slot.crockpot || r.crockpot); });
+    var locked = isLocked(dow);
+    var cands = S.recipes.filter(function (r) { return r.active && (!slot.crockpot || r.crockpot); });
+    if (locked) {   // hard rule: only this day's category (a crockpot day with none in it falls back to any crockpot meal)
+      var inCat = cands.filter(function (r) { return r.category === defCat; });
+      if (inCat.length) cands = inCat;
+    }
+    var pool = cands.filter(function (r) { return !used[r.id]; });
+    if (!pool.length) pool = cands;
     if (!pool.length) return null;
     var weights = pool.map(function (r) {
       var w = 1;
@@ -386,18 +396,18 @@
     });
     // Soft day defaults: the usual category gets about 70% of the odds that day, and the usual
     // meal about half of its category's share. Repeats and recent meals still pull them down.
-    if (defCat && !slot.crockpot) {
+    if (defCat && !slot.crockpot && !locked) {
       var D = 0, O = 0;
       pool.forEach(function (r, k) { if (r.category === defCat) D += weights[k]; else O += weights[k]; });
       if (D > 0 && O > 0) {
         var share = (catCount[defCat] ? 0.35 : 0.7), kk = (share / (1 - share)) * O / D;
         pool.forEach(function (r, k) { if (r.category === defCat) weights[k] *= kk; });
-        var fi = pool.findIndex(function (r) { return r.id === fav; });
-        if (fi >= 0 && recent[fav] !== 1) {
-          var rest = 0; pool.forEach(function (r, k) { if (r.category === defCat && k !== fi) rest += weights[k]; });
-          if (rest > 0) weights[fi] = Math.max(weights[fi], rest);
-        }
       }
+    }
+    var fi = fav && !slot.crockpot ? pool.findIndex(function (r) { return r.id === fav; }) : -1;
+    if (fi >= 0 && recent[fav] !== 1) {
+      var rest = 0; pool.forEach(function (r, k) { if (r.category === pool[fi].category && k !== fi) rest += weights[k]; });
+      if (rest > 0) weights[fi] = Math.max(weights[fi], rest);
     }
     var total = weights.reduce(function (a, b) { return a + b; }, 0), x = Math.random() * total;
     for (var k = 0; k < pool.length; k++) { x -= weights[k]; if (x <= 0) return pool[k]; }
@@ -412,8 +422,11 @@
     $('spinBtn').disabled = true;
     var used = {}, catCount = {}, recent = weeksAgoMade();
     board.forEach(function (b) { if (b.held && b.recipeId) { used[b.recipeId] = 1; var r = byId[b.recipeId]; if (r) catCount[r.category] = (catCount[r.category] || 0) + 1; } });
-    // Crockpot days pick first so their smaller pool isn't crowded out.
-    open.sort(function (a, b) { return (board[b].crockpot ? 1 : 0) - (board[a].crockpot ? 1 : 0); });
+    // Locked days pick first so the other days steer around their categories; then crockpot days,
+    // so their smaller pool isn't crowded out.
+    var dates0 = dayDates();
+    var rank = function (i) { return (isLocked(dates0[i].getDay()) ? 2 : 0) + (board[i].crockpot ? 1 : 0); };
+    open.sort(function (a, b) { return rank(b) - rank(a); });
     var results = {};
     open.forEach(function (i) {
       var r = pickFor(i, used, catCount, recent);
@@ -427,11 +440,10 @@
       board[i].recipeId = r ? r.id : ''; board[i].name = r ? r.name : '';
       animateReel(i, prev, r, 650 + n * 230, function () {
         done++;
-        sfx('stop');
-        if (done === order.length) { spinning = false; $('spinBtn').disabled = false; persist(); renderMachine(); renderLunch(); renderStats(); }
+        if (navigator.vibrate) navigator.vibrate(12);
+        if (done === order.length) { spinning = false; $('spinBtn').disabled = false; persist(); renderMachine(); renderStats(); }
       });
     });
-    sfx('spin', 650 + order.length * 230);
   }
 
   /* ---------- rendering: machine ---------- */
@@ -441,16 +453,21 @@
     var meta = '';
     if (cat) meta += '<span class="chip" style="background:' + CAT_COLORS[cat] + '">' + esc(cat) + '</span>';
     if (recipe && recipe.crockpot) meta += '<span title="Crockpot friendly">🍲</span>';
-    if (ds && clashes(name, ds)) meta += '<span class="warn" title="Same as school lunch">⚠ lunch</span>';
     return '<div class="cell"><div class="nm">' + esc(name) + '</div><div class="meta">' + meta + '</div></div>';
   }
   function renderMachine() {
     var dates = dayDates(), today = ymd(new Date());
-    $('machine').innerHTML = board.map(function (b, i) {
-      var d = dates[i], ds = ymd(d);
+    var anyLunch = dates.some(function (d) { return lunchOn(ymd(d)); });
+    $('machine').classList.toggle('nolunch', !anyLunch);
+    $('machine').innerHTML = '<div class="mhead"><span>Day</span><span class="mh-lunch">Lunch</span><span>Dinner</span><span></span><span></span></div>' +
+      board.map(function (b, i) {
+      var d = dates[i], ds = ymd(d), lunch = lunchOn(ds);
+      var lunchShort = lunch.replace(/\s*\([^)]*\)/g, '').trim() || lunch;
+      var clash = lunch && b.name && clashes(b.name, ds);
+      var lock = isLocked(d.getDay());
       return '<div class="row" data-i="' + i + '">' +
-        '<div class="grip" data-grip="' + i + '" aria-label="Drag to swap">⋮⋮</div>' +
-        '<div class="day' + (ds === today ? ' today' : '') + '"><b>' + DOW[d.getDay()].toUpperCase() + '</b><span>' + (d.getMonth() + 1) + '/' + d.getDate() + '</span></div>' +
+        '<div class="day' + (ds === today ? ' today' : '') + '" data-grip="' + i + '" aria-label="Drag to swap days"' + (lock ? ' title="Locked to ' + esc(S.settings.defaults[d.getDay()]) + '"' : '') + '><b>' + DOW[d.getDay()].toUpperCase() + '</b><span>' + (d.getMonth() + 1) + '/' + d.getDate() + (lock ? ' 🔒' : '') + '</span></div>' +
+        '<div class="lun' + (lunch ? '' : ' none') + (clash ? ' clash' : '') + '"' + (lunch ? ' title="' + esc(lunch) + '"' : '') + '><span>' + (lunch ? (clash ? '⚠ ' : '') + esc(lunchShort) : '—') + '</span></div>' +
         '<div class="reel' + (b.held ? ' held' : '') + '" data-reel="' + i + '"><div class="strip">' + cellHtml(b.name, byId[b.recipeId], ds) + '</div></div>' +
         '<button class="pot' + (b.crockpot ? ' on' : '') + '" data-pot="' + i + '" aria-label="Crockpot day" aria-pressed="' + b.crockpot + '">🍲</button>' +
         '<button class="hold' + (b.held ? ' on' : '') + '" data-hold="' + i + '" aria-pressed="' + b.held + '">' + (b.held ? 'HELD' : 'HOLD') + '</button>' +
@@ -479,17 +496,6 @@
     var cats = {}; board.forEach(function (b) { var r = byId[b.recipeId]; if (r) cats[r.category] = 1; });
     $('stats').textContent = held + '/7 held · ' + Object.keys(cats).length + ' categories' + (spins ? ' · spin #' + spins : '');
   }
-  function renderLunch() {
-    var dates = dayDates().filter(function (d) { return d.getDay() >= 1 && d.getDay() <= 5; });
-    var any = dates.some(function (d) { return lunchOn(ymd(d)); });
-    var boardByDate = {}; dayDates().forEach(function (d, i) { boardByDate[ymd(d)] = board[i]; });
-    $('lunch').innerHTML = '<h3>School lunch <small>' + (any ? 'mains' : 'no menu for these days yet') + '</small></h3><div class="lgrid">' +
-      dates.map(function (d) {
-        var ds = ymd(d), m = lunchOn(ds), b = boardByDate[ds];
-        var clash = b && b.name && clashes(b.name, ds);
-        return '<div class="lday' + (m ? '' : ' none') + (clash ? ' clash' : '') + '"><b>' + DOW[d.getDay()] + ' ' + (d.getMonth() + 1) + '/' + d.getDate() + '</b>' + esc(m || '—') + '</div>';
-      }).join('') + '</div>';
-  }
   function renderWeekLbl() {
     var d = dayDates(), a = d[0], b = d[6];
     var fmt = function (x) { return x.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); };
@@ -501,17 +507,17 @@
     var t = e.target.closest('button, .reel'); if (!t || spinning) return;
     if (t.dataset.hold != null) {
       var b = board[+t.dataset.hold]; if (!b.name) return;
-      b.held = !b.held; sfx('hold'); persist(); renderMachine(); renderStats();
+      b.held = !b.held; persist(); renderMachine(); renderStats();
       if (board.every(function (x) { return x.held; })) jackpot();
     } else if (t.dataset.pot != null) {
       var p = board[+t.dataset.pot]; p.crockpot = !p.crockpot;
       if (p.crockpot && p.recipeId && byId[p.recipeId] && !byId[p.recipeId].crockpot && !p.held) { p.recipeId = ''; p.name = ''; }
-      sfx('hold'); persist(); renderMachine(); renderStats();
+      persist(); renderMachine(); renderStats();
     } else if (t.dataset.reel != null) {
       openDaySheet(+t.dataset.reel);
     }
   });
-  $('spinBtn').addEventListener('click', function () { unlockAudio(); spin(); });
+  $('spinBtn').addEventListener('click', spin);
   $('clearBtn').addEventListener('click', function () { if (spinning) return; board.forEach(function (b) { b.held = false; }); persist(); renderMachine(); renderStats(); });
   $('holdAllBtn').addEventListener('click', function () { if (spinning) return; board.forEach(function (b) { if (b.name) b.held = true; }); persist(); renderMachine(); renderStats(); if (board.every(function (x) { return x.held; })) jackpot(); });
   $('prev').addEventListener('click', function () { if (spinning) return; weekOffset--; loadBoard(); renderAll(); });
@@ -554,10 +560,10 @@
         var tmp = { recipeId: a.recipeId, name: a.name, held: a.held };
         a.recipeId = b.recipeId; a.name = b.name; a.held = b.held;
         b.recipeId = tmp.recipeId; b.name = tmp.name; b.held = tmp.held;
-        sfx('hold'); persist();
+        persist();
       }
       from = -1; over = -1; ghost = null;
-      renderMachine(); renderLunch();
+      renderMachine();
     }
     $('machine').addEventListener('pointerup', end);
     $('machine').addEventListener('pointercancel', end);
@@ -581,6 +587,7 @@
   function openDaySheet(i) {
     var b = board[i], r = byId[b.recipeId], d = dayDates()[i];
     var lunch = lunchOn(ymd(d));
+    var lockCat = isLocked(d.getDay()) ? S.settings.defaults[d.getDay()] : '';
     var s = openSheet('<h2>' + DOW_LONG[d.getDay()] + '</h2>' +
       (b.name ? '<h3 style="margin:4px 0">' + esc(b.name) + '</h3>' + recipeDetail(r) : '<p class="note">Nothing here yet.</p>') +
       (lunch ? '<p class="note">School lunch: ' + esc(lunch) + '</p>' : '') +
@@ -591,7 +598,7 @@
     function list() {
       var q = s.querySelector('#pickQ').value.toLowerCase();
       var items = S.recipes.filter(function (x) { return x.active && (!b.crockpot || x.crockpot) && (!q || x.name.toLowerCase().indexOf(q) >= 0); })
-        .sort(function (a, c) { return a.name.localeCompare(c.name); });
+        .sort(function (a, c) { return (lockCat ? (a.category !== lockCat) - (c.category !== lockCat) : 0) || a.name.localeCompare(c.name); });
       s.querySelector('#pickList').innerHTML = items.map(function (x) {
         return '<button data-id="' + esc(x.id) + '"><span>' + esc(x.name) + '</span><span class="chip" style="background:' + CAT_COLORS[x.category] + '">' + esc(x.category) + '</span></button>';
       }).join('') || '<p class="note">No matches' + (b.crockpot ? ' among crockpot meals' : '') + '.</p>';
@@ -601,11 +608,11 @@
     s.querySelector('#pickList').addEventListener('click', function (e) {
       var t = e.target.closest('[data-id]'); if (!t) return;
       var x = byId[t.dataset.id]; b.recipeId = x.id; b.name = x.name; b.held = true;
-      persist(); renderMachine(); renderLunch(); renderStats(); s.remove();
+      persist(); renderMachine(); renderStats(); s.remove();
       if (board.every(function (y) { return y.held; })) jackpot();
     });
     s.querySelector('#closeSheet').addEventListener('click', function () { s.remove(); });
-    if (s.querySelector('#clearDay')) s.querySelector('#clearDay').addEventListener('click', function () { b.recipeId = ''; b.name = ''; b.held = false; persist(); renderMachine(); renderLunch(); renderStats(); s.remove(); });
+    if (s.querySelector('#clearDay')) s.querySelector('#clearDay').addEventListener('click', function () { b.recipeId = ''; b.name = ''; b.held = false; persist(); renderMachine(); renderStats(); s.remove(); });
     if (s.querySelector('#editThis')) s.querySelector('#editThis').addEventListener('click', function () { s.remove(); editRecipe(r); });
   }
 
@@ -737,10 +744,10 @@
       var favOpts = S.recipes.filter(function (r) { return r.active && (!cat || r.category === cat); }).sort(function (a, b) { return a.name.localeCompare(b.name); });
       return '<div class="srow" data-dow="' + dow + '"><span>' + DOW[dow] + '</span>' +
         '<select data-f="cat"><option value="">Any</option>' + CATS.map(function (c) { return '<option' + (c === cat ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select>' +
+        '<input type="checkbox" data-f="lock" aria-label="Lock ' + DOW[dow] + ' to this category"' + ((st.lockDays || []).indexOf(dow) >= 0 ? ' checked' : '') + '>' +
         '<select data-f="fav"><option value="">None</option>' + favOpts.map(function (r) { return '<option value="' + esc(r.id) + '"' + (r.id === fav ? ' selected' : '') + '>' + esc(r.name) + '</option>'; }).join('') + '</select>' +
         '<input type="checkbox" data-f="cp"' + ((st.crockpotDays || []).indexOf(dow) >= 0 ? ' checked' : '') + '></div>';
     }).join('');
-    $('sound').checked = st.sound !== false;
     $('connInfo').textContent = LOCAL
       ? 'Not connected to the Meals sheet. Everything is saved on this device only. Open the setup link from the README to connect.'
       : 'Connected to the Meals sheet. Changes sync to the other phone.';
@@ -754,12 +761,13 @@
     }
   });
   $('saveSettings').addEventListener('click', function () {
-    var st = { weekStart: +$('weekStart').value, defaults: {}, favorites: {}, crockpotDays: [], sound: $('sound').checked };
+    var st = { weekStart: +$('weekStart').value, defaults: {}, favorites: {}, lockDays: [], crockpotDays: [] };
     document.querySelectorAll('#dayRules .srow').forEach(function (row) {
       var dow = +row.dataset.dow;
       var c = row.querySelector('[data-f=cat]').value, f = row.querySelector('[data-f=fav]').value;
       if (c) st.defaults[dow] = c; if (f) st.favorites[dow] = f;
       if (row.querySelector('[data-f=cp]').checked) st.crockpotDays.push(dow);
+      if (c && row.querySelector('[data-f=lock]').checked) st.lockDays.push(dow);
     });
     var wsChanged = st.weekStart !== S.settings.weekStart;
     S.settings = mergeSettings(st);
@@ -787,29 +795,9 @@
     if (t.dataset.view === 'list') renderList();
     window.scrollTo(0, 0);
   });
-  function renderAll() { renderWeekLbl(); renderMachine(); renderStats(); renderLunch(); renderBook(); renderSettings(); if (!$('v-list').hidden) renderList(); }
+  function renderAll() { renderWeekLbl(); renderMachine(); renderStats(); renderBook(); renderSettings(); if (!$('v-list').hidden) renderList(); }
 
-  /* ---------- sound ---------- */
-  var ac = null;
-  function unlockAudio() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ac && ac.state === 'suspended') ac.resume(); }
-  function beep(freq, at, dur, type, vol) {
-    var o = ac.createOscillator(), g = ac.createGain();
-    o.type = type || 'square'; o.frequency.value = freq; g.gain.value = vol || 0.04;
-    g.gain.setValueAtTime(vol || 0.04, ac.currentTime + at); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + at + dur);
-    o.connect(g); g.connect(ac.destination); o.start(ac.currentTime + at); o.stop(ac.currentTime + at + dur + 0.02);
-  }
-  function sfx(kind, ms) {
-    if (!ac || S.settings.sound === false) return;
-    try {
-      if (kind === 'spin') { for (var t = 0; t < ms / 1000; t += 0.07) beep(500 + Math.random() * 300, t, 0.03, 'square', 0.025); }
-      else if (kind === 'stop') beep(880, 0, 0.12, 'triangle', 0.08);
-      else if (kind === 'hold') beep(330, 0, 0.06, 'square', 0.05);
-      else if (kind === 'jackpot') [523, 659, 784, 1047, 784, 1047].forEach(function (f, i) { beep(f, i * 0.11, 0.18, 'triangle', 0.09); });
-    } catch (e) {}
-    if (kind === 'stop' && navigator.vibrate) navigator.vibrate(12);
-  }
   function jackpot() {
-    sfx('jackpot');
     var j = document.createElement('div'); j.className = 'jackpot'; j.innerHTML = '<span>JACKPOT!</span>'; document.body.appendChild(j);
     var colors = ['#f5c542', '#e8344e', '#3fd18b', '#2f7fe0', '#fff'];
     for (var i = 0; i < 70; i++) {
