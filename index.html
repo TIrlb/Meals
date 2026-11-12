@@ -590,6 +590,9 @@
     var lockCat = isLocked(d.getDay()) ? S.settings.defaults[d.getDay()] : '';
     var s = openSheet('<h2>' + DOW_LONG[d.getDay()] + '</h2>' +
       (b.name ? '<h3 style="margin:4px 0">' + esc(b.name) + '</h3>' + recipeDetail(r) : '<p class="note">Nothing here yet.</p>') +
+      (r ? (r.active
+        ? '<button class="btn danger" id="retireThis" style="margin:2px 0 6px">🚫 Take out of rotation</button>'
+        : '<p class="note">Out of rotation. <button class="btn ghost" id="restoreThis" style="padding:6px 10px">Put back in rotation</button></p>') : '') +
       (lunch ? '<p class="note">School lunch: ' + esc(lunch) + '</p>' : '') +
       '<label class="f">Pick a meal for this day</label><input class="field" id="pickQ" type="search" placeholder="Search">' +
       '<div class="pick" id="pickList"></div>' +
@@ -613,7 +616,32 @@
     });
     s.querySelector('#closeSheet').addEventListener('click', function () { s.remove(); });
     if (s.querySelector('#clearDay')) s.querySelector('#clearDay').addEventListener('click', function () { b.recipeId = ''; b.name = ''; b.held = false; persist(); renderMachine(); renderStats(); s.remove(); });
+    if (s.querySelector('#retireThis')) s.querySelector('#retireThis').addEventListener('click', function () {
+      var prev = { recipeId: b.recipeId, name: b.name, held: b.held };
+      setActive(r, false);
+      b.recipeId = ''; b.name = ''; b.held = false;   // empty the day so the next spin refills it
+      persist(); renderMachine(); renderStats(); s.remove();
+      undoToast(r.name + ' is out of rotation', function () {
+        setActive(r, true);
+        b.recipeId = prev.recipeId; b.name = prev.name; b.held = prev.held;
+        persist(); renderMachine(); renderStats();
+      });
+    });
+    if (s.querySelector('#restoreThis')) s.querySelector('#restoreThis').addEventListener('click', function () { setActive(r, true); s.remove(); toast(r.name + ' is back in rotation'); });
     if (s.querySelector('#editThis')) s.querySelector('#editThis').addEventListener('click', function () { s.remove(); editRecipe(r); });
+  }
+
+  function setActive(r, on) {
+    r.active = on; renderBook(); renderSettings();
+    if (LOCAL) { saveLocal(); return; }
+    apiPost({ action: 'setActive', id: r.id, active: on }).catch(function (err) { toast('Not saved: ' + err.message); });
+  }
+  function undoToast(msg, undo) {
+    var t = document.createElement('div'); t.className = 'toast';
+    t.innerHTML = '<span>' + esc(msg) + '</span> <button style="color:var(--gold);font-weight:800;margin-left:10px">Undo</button>';
+    t.style.pointerEvents = 'auto';
+    t.querySelector('button').addEventListener('click', function () { t.remove(); undo(); });
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 5000);
   }
 
   /* ---------- recipe book ---------- */
@@ -643,9 +671,7 @@
   $('catFilter').addEventListener('click', function (e) { var t = e.target.closest('[data-cat]'); if (!t) return; bookCat = t.dataset.cat; renderBook(); });
   $('bookList').addEventListener('change', function (e) {
     var id = e.target.dataset.active; if (!id) return;
-    var r = byId[id]; r.active = e.target.checked; renderBook();
-    if (LOCAL) saveLocal();
-    else apiPost({ action: 'setActive', id: id, active: r.active }).catch(function (err) { toast('Not saved: ' + err.message); });
+    setActive(byId[id], e.target.checked);
   });
   $('bookList').addEventListener('click', function (e) { var t = e.target.closest('[data-edit]'); if (t) editRecipe(byId[t.dataset.edit]); });
   $('addBtn').addEventListener('click', function () { editRecipe(null); });
