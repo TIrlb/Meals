@@ -1,6 +1,6 @@
 # Mealio Dealio
 
-A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe book, HOLD locks the ones you like, and you spin again until the week looks right. Drag a day label (TUE, WED…) onto another day to swap their dinners. Each day's school lunch main sits next to its dinner and turns orange when they match. Tap 🍲 on a day to make it a crockpot night, so it only lands on crockpot meals. Tap a meal to see ingredients, pick one by hand, or edit it.
+A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe book, HOLD locks the ones you like, and you spin again until the week looks right. Drag a day label (TUE, WED…) onto another day to swap their dinners. Each day's school lunch main sits next to its dinner and turns orange when they match. Tap 🍲 on a day to make it a crockpot night, so it only lands on crockpot meals. Tap a meal to see ingredients, pick one by hand, type a brand-new meal (it's added to the Recipes tab), take it out of rotation, or edit it. 📤 Share week sends the week as text to the share sheet (Notes, Messages).
 
 | Piece | What it is |
 |---|---|
@@ -16,6 +16,9 @@ A slot machine for the weekly dinner plan. SPIN fills seven days from the recipe
 - If a meal matches that day's school lunch main (pizza, tacos, nuggets, carnitas, pot roast, etc.), its odds drop 25×.
 - Web-sourced recipes get a slight discount vs. family ones.
 - Picking a meal by hand (tap the reel) ignores all of this. On a locked day, that category is listed first.
+
+## Sync
+Phones connected with the setup link read and write the sheet. The app re-reads it when reopened and every 30 seconds while it's open and idle. Saves merge by day: days this phone didn't change keep whatever the other phone saved, so two people editing different days don't overwrite each other. If both change the same day, the last save wins.
 
 ## The sheet
 [Meals](https://docs.google.com/spreadsheets/d/1cyy4fYicx1edYd3nw8rAUE7pF_wf20zFoJEUjTgU6Xk/edit) is the source of truth, so bulk edits can be made there directly.

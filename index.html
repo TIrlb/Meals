@@ -144,6 +144,14 @@
   .sheet .acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
   .sheet ul { margin: 6px 0; padding-left: 20px; }
   .sheet a { color: var(--gold); }
+  .addnew { margin-top: 8px; padding: 10px; border-radius: 12px; background: rgba(245,197,66,.12); box-shadow: inset 0 0 0 1px var(--line); }
+  .addline { font-size: 14px; margin-bottom: 8px; overflow-wrap: anywhere; }
+  .addrow { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; }
+  .addrow select { padding: 8px; }
+  .addrow label { display: flex; gap: 4px; align-items: center; font-size: 18px; }
+  .addrow input { width: 20px; height: 20px; accent-color: var(--gold); }
+  .sharebar { text-align: center; margin: 8px 0 4px; }
+  .sharebar button { color: var(--gold); font-weight: 700; font-size: 14px; padding: 6px 10px; }
   .pick { display: grid; gap: 4px; max-height: 50dvh; overflow: auto; margin-top: 8px; }
   .pick button { text-align: left; padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.04); display: flex; justify-content: space-between; gap: 8px; }
 
@@ -177,6 +185,7 @@
       <button class="side" id="holdAllBtn">Hold all</button>
     </div>
     <div class="stats" id="stats"></div>
+    <div class="sharebar"><button id="shareWeek">📤 Share week</button></div>
   </main>
 
   <main id="v-book" hidden>
@@ -264,7 +273,7 @@
   var byId = {};
   var weekOffset = 0;
   var board = [];          // 7 x {recipeId, name, held, crockpot}
-  var spinning = false;
+  var spinning = false, dragging = false;
   var spins = 0;
 
   function index() { byId = {}; S.recipes.forEach(function (r) { byId[r.id] = r; }); }
@@ -291,7 +300,7 @@
       index();
       if (first || !dirty) loadBoard();
       renderAll();
-      $('sync').textContent = LOCAL ? 'Local mode: saved on this device only' : '';
+      $('sync').textContent = LOCAL ? 'Not synced: saved on this phone only (see Settings)' : '';
     }).catch(function (e) {
       $('sync').textContent = 'Couldn’t reach the sheet: ' + e.message;
     });
@@ -314,10 +323,16 @@
       return { recipeId: '', name: '', held: false, crockpot: (S.settings.crockpotDays || []).indexOf(d.getDay()) >= 0 };
     });
   }
+  function daysFrom(w) {
+    var out = emptyBoard();
+    if (w && w.days) w.days.forEach(function (d, i) { if (out[i] && d) out[i] = { recipeId: d.recipeId || '', name: d.name || '', held: !!d.held, crockpot: !!d.crockpot }; });
+    return out;
+  }
+  function sameDay(a, b) { return a.recipeId === b.recipeId && a.name === b.name && a.held === b.held && a.crockpot === b.crockpot; }
+  var baseline = [];   // the week as last seen from the sheet; used to tell which days this phone changed
   function loadBoard() {
-    var w = S.weeks.filter(function (x) { return x.weekStart === curKey(); })[0];
-    board = emptyBoard();
-    if (w && w.days) w.days.forEach(function (d, i) { if (board[i] && d) board[i] = { recipeId: d.recipeId || '', name: d.name || '', held: !!d.held, crockpot: !!d.crockpot }; });
+    board = daysFrom(S.weeks.filter(function (x) { return x.weekStart === curKey(); })[0]);
+    baseline = board.map(function (d) { return Object.assign({}, d); });
   }
 
   var dirty = false, saveTimer = null;
@@ -330,8 +345,23 @@
     saveTimer = setTimeout(function () {
       if (LOCAL) { saveLocal(); dirty = false; return; }
       $('sync').textContent = 'Saving…';
-      apiPost({ action: 'saveWeek', weekStart: key, days: days }).then(function () { dirty = false; $('sync').textContent = 'Saved'; setTimeout(function () { if (!dirty) $('sync').textContent = ''; }, 1500); })
-        .catch(function (e) { $('sync').textContent = 'Not saved: ' + e.message; });
+      // Read-merge-write: days this phone didn't touch take whatever the other phone saved meanwhile.
+      apiGet().then(function (st) {
+        var theirs = daysFrom((st.weeks || []).filter(function (x) { return x.weekStart === key; })[0]);
+        var mine = board.map(function (d) { return Object.assign({}, d); });
+        var merged = mine.map(function (d, i) { return baseline[i] && sameDay(d, baseline[i]) ? theirs[i] : d; });
+        return apiPost({ action: 'saveWeek', weekStart: key, days: merged }).then(function () { return merged; });
+      }).then(function (merged) {
+        dirty = false;
+        if (key === curKey()) {
+          var changed = merged.some(function (d, i) { return !sameDay(d, board[i]); });
+          board = merged.map(function (d) { return Object.assign({}, d); });
+          baseline = merged.map(function (d) { return Object.assign({}, d); });
+          if (changed) { renderMachine(); renderStats(); }
+        }
+        var w2 = S.weeks.filter(function (x) { return x.weekStart === key; })[0]; if (w2) w2.days = merged;
+        $('sync').textContent = 'Saved'; setTimeout(function () { if (!dirty) $('sync').textContent = ''; }, 1500);
+      }).catch(function (e) { $('sync').textContent = 'Not saved: ' + e.message; });
     }, 700);
   }
 
@@ -534,7 +564,7 @@
     $('machine').addEventListener('pointerdown', function (e) {
       var g = e.target.closest('[data-grip]'); if (!g || spinning) return;
       e.preventDefault();
-      from = +g.dataset.grip;
+      from = +g.dataset.grip; dragging = true;
       var row = g.closest('.row'), rect = row.getBoundingClientRect();
       offY = e.clientY - rect.top;
       ghost = row.cloneNode(true); ghost.className = 'row ghost-row';
@@ -562,7 +592,7 @@
         b.recipeId = tmp.recipeId; b.name = tmp.name; b.held = tmp.held;
         persist();
       }
-      from = -1; over = -1; ghost = null;
+      from = -1; over = -1; ghost = null; dragging = false;
       renderMachine();
     }
     $('machine').addEventListener('pointerup', end);
@@ -594,7 +624,11 @@
         ? '<button class="btn danger" id="retireThis" style="margin:2px 0 6px">🚫 Take out of rotation</button>'
         : '<p class="note">Out of rotation. <button class="btn ghost" id="restoreThis" style="padding:6px 10px">Put back in rotation</button></p>') : '') +
       (lunch ? '<p class="note">School lunch: ' + esc(lunch) + '</p>' : '') +
-      '<label class="f">Pick a meal for this day</label><input class="field" id="pickQ" type="search" placeholder="Search">' +
+      '<label class="f">Pick a meal, or type a new one</label><input class="field" id="pickQ" type="search" placeholder="Search or type a new meal" autocomplete="off">' +
+      '<div class="addnew" id="addNew" hidden><div class="addline">＋ Add <b id="nName"></b> to the recipe book</div>' +
+        '<div class="addrow"><select id="nCat">' + CATS.map(function (c) { return '<option' + (c === (lockCat || 'General') ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select>' +
+        '<label><input type="checkbox" id="nCp"' + (b.crockpot ? ' checked' : '') + '> 🍲</label>' +
+        '<button class="btn" id="nAdd">Add &amp; use</button></div></div>' +
       '<div class="pick" id="pickList"></div>' +
       '<div class="acts">' + (r ? '<button class="btn ghost" id="editThis">Edit recipe</button>' : '') +
       (b.name ? '<button class="btn danger" id="clearDay">Clear day</button>' : '') + '<button class="btn" id="closeSheet">Done</button></div>');
@@ -602,9 +636,13 @@
       var q = s.querySelector('#pickQ').value.toLowerCase();
       var items = S.recipes.filter(function (x) { return x.active && (!b.crockpot || x.crockpot) && (!q || x.name.toLowerCase().indexOf(q) >= 0); })
         .sort(function (a, c) { return (lockCat ? (a.category !== lockCat) - (c.category !== lockCat) : 0) || a.name.localeCompare(c.name); });
+      var raw = s.querySelector('#pickQ').value.trim();
+      var exact = raw && S.recipes.some(function (x) { return x.name.toLowerCase() === raw.toLowerCase(); });
+      s.querySelector('#addNew').hidden = !raw || exact;
+      s.querySelector('#nName').textContent = '“' + raw + '”';
       s.querySelector('#pickList').innerHTML = items.map(function (x) {
         return '<button data-id="' + esc(x.id) + '"><span>' + esc(x.name) + '</span><span class="chip" style="background:' + CAT_COLORS[x.category] + '">' + esc(x.category) + '</span></button>';
-      }).join('') || '<p class="note">No matches' + (b.crockpot ? ' among crockpot meals' : '') + '.</p>';
+      }).join('') || (raw ? '' : '<p class="note">No matches' + (b.crockpot ? ' among crockpot meals' : '') + '.</p>');
     }
     list();
     s.querySelector('#pickQ').addEventListener('input', list);
@@ -615,6 +653,17 @@
       if (board.every(function (y) { return y.held; })) jackpot();
     });
     s.querySelector('#closeSheet').addEventListener('click', function () { s.remove(); });
+    s.querySelector('#nAdd').addEventListener('click', function () {
+      var name = s.querySelector('#pickQ').value.trim(); if (!name) return;
+      var btn = this; btn.disabled = true; btn.textContent = 'Adding…';
+      saveRecipe({ id: '', name: name, category: s.querySelector('#nCat').value, crockpot: s.querySelector('#nCp').checked,
+        active: true, ingredients: [], url: '', notes: '', source: 'family' }).then(function (saved) {
+        b.recipeId = saved.id; b.name = saved.name; b.held = true;
+        persist(); renderMachine(); renderStats(); s.remove();
+        toast(saved.name + ' added to the recipe book');
+        if (board.every(function (y) { return y.held; })) jackpot();
+      }).catch(function (e) { btn.disabled = false; btn.textContent = 'Add & use'; toast('Not saved: ' + e.message); });
+    });
     if (s.querySelector('#clearDay')) s.querySelector('#clearDay').addEventListener('click', function () { b.recipeId = ''; b.name = ''; b.held = false; persist(); renderMachine(); renderStats(); s.remove(); });
     if (s.querySelector('#retireThis')) s.querySelector('#retireThis').addEventListener('click', function () {
       var prev = { recipeId: b.recipeId, name: b.name, held: b.held };
@@ -631,6 +680,19 @@
     if (s.querySelector('#editThis')) s.querySelector('#editThis').addEventListener('click', function () { s.remove(); editRecipe(r); });
   }
 
+  function saveRecipe(rec) {
+    var p = LOCAL
+      ? Promise.resolve(Object.assign({}, rec, { id: rec.id || rec.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).slice(2, 6) }))
+      : apiPost({ action: 'upsertRecipe', recipe: rec }).then(function (j) { return j.recipe; });
+    return p.then(function (saved) {
+      var i = S.recipes.findIndex(function (y) { return y.id === saved.id; });
+      if (i >= 0) S.recipes[i] = saved; else S.recipes.push(saved);
+      index(); board.forEach(function (bb) { if (bb.recipeId === saved.id) bb.name = saved.name; });
+      if (LOCAL) saveLocal();
+      renderBook(); renderSettings();
+      return saved;
+    });
+  }
   function setActive(r, on) {
     r.active = on; renderBook(); renderSettings();
     if (LOCAL) { saveLocal(); return; }
@@ -643,6 +705,17 @@
     t.querySelector('button').addEventListener('click', function () { t.remove(); undo(); });
     document.body.appendChild(t); setTimeout(function () { t.remove(); }, 5000);
   }
+
+  $('shareWeek').addEventListener('click', function () {
+    var dates = dayDates();
+    var lines = board.map(function (b, i) {
+      var d = dates[i];
+      return DOW[d.getDay()] + ' ' + (d.getMonth() + 1) + '/' + d.getDate() + ' – ' + (b.name || '?') + (b.crockpot ? ' 🍲' : '');
+    });
+    var text = 'Dinners ' + $('weekLbl').textContent.replace(/^.*· /, '') + '\n' + lines.join('\n');
+    if (navigator.share) navigator.share({ text: text }).catch(function () {});
+    else navigator.clipboard.writeText(text).then(function () { toast('Copied'); });
+  });
 
   /* ---------- recipe book ---------- */
   var bookCat = 'All', showRetired = true;
@@ -696,19 +769,8 @@
         url: s.querySelector('#eUrl').value.trim(), notes: s.querySelector('#eNotes').value.trim(), source: x.source || 'family'
       };
       var btn = s.querySelector('#eSave'); btn.disabled = true; btn.textContent = 'Saving…';
-      var done = function (saved) {
-        var i = S.recipes.findIndex(function (y) { return y.id === saved.id; });
-        if (i >= 0) S.recipes[i] = saved; else S.recipes.push(saved);
-        index(); board.forEach(function (b) { if (b.recipeId === saved.id) b.name = saved.name; });
-        renderAll(); s.remove(); toast('Saved');
-      };
-      if (LOCAL) {
-        if (!rec.id) rec.id = rec.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).slice(2, 6);
-        done(rec); saveLocal();
-      } else {
-        apiPost({ action: 'upsertRecipe', recipe: rec }).then(function (j) { done(j.recipe); })
-          .catch(function (e) { btn.disabled = false; btn.textContent = 'Save'; toast('Not saved: ' + e.message); });
-      }
+      saveRecipe(rec).then(function () { renderAll(); s.remove(); toast('Saved'); })
+        .catch(function (e) { btn.disabled = false; btn.textContent = 'Save'; toast('Not saved: ' + e.message); });
     });
   }
 
@@ -839,7 +901,14 @@
 
   /* ---------- go ---------- */
   load(true);
-  document.addEventListener('visibilitychange', function () { if (!document.hidden && !LOCAL && !spinning && !dirty) load(false); });
+  // Pick up the other phone's changes: on return to the app, and every 30s while it's open and idle.
+  function idle() {
+    var a = document.activeElement;
+    return !document.hidden && !LOCAL && !spinning && !dirty && !dragging && !document.querySelector('.scrim') &&
+      $('v-settings').hidden && !(a && /INPUT|SELECT|TEXTAREA/.test(a.tagName));
+  }
+  document.addEventListener('visibilitychange', function () { if (idle()) load(false); });
+  setInterval(function () { if (idle()) load(false); }, 30000);
 })();
 </script>
 </body>
